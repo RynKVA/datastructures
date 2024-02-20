@@ -1,16 +1,18 @@
 package org.example.list;
 
+import org.example.list.exceptions.IndexOutOfListExceptin;
+import org.example.list.exceptions.ListIsEmptyException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArrayList1Test {
-    private ArrayList list = new ArrayList();
+    private final ArrayList list = new ArrayList();
     //
 
     @BeforeEach
-    void before() {
+    void before() throws IndexOutOfListExceptin {
         list.add(5);
         list.add(7);
         list.add(9);
@@ -19,7 +21,7 @@ class ArrayList1Test {
     }
 
     @Test
-    void add() {
+    void add() throws IndexOutOfListExceptin {
         ArrayList list = new ArrayList();
         list.add(5);
         list.add(7);
@@ -35,7 +37,7 @@ class ArrayList1Test {
     }
 
     @Test
-    void testAdd() {
+    void testAdd() throws IndexOutOfListExceptin {
         ArrayList list = new ArrayList();
         list.add(3,0);
 
@@ -48,14 +50,13 @@ class ArrayList1Test {
 
     @Test
     void test() {
-        ArrayList list = new ArrayList();
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
            list.add(11, 1);
         });
     }
 
     @Test
-    void contains() {
+    void contains() throws IndexOutOfListExceptin {
         ArrayList list = new ArrayList();
         list.add(5);
         list.add(7);
@@ -67,7 +68,7 @@ class ArrayList1Test {
     }
 
     @Test
-    void remove() {
+    void remove() throws IndexOutOfListExceptin, ListIsEmptyException {
         ArrayList list = new ArrayList();
         list.add(5);
         list.add(7);

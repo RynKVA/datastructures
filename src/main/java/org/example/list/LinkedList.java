@@ -1,4 +1,4 @@
-package org.example.list;
+/*package org.example.list;
 
 public class LinkedList implements List {
 
@@ -9,11 +9,11 @@ public class LinkedList implements List {
         Node next;
         Node prev;
 
-        /*public Node(int data, Node next, Node prev) {
+        *//*public Node(int data, Node next, Node prev) {
             this.data = data;
             this.next = next;
             this.prev = prev;
-        }*/
+        }*//*
 
         public Node(int data) {
             this.data = data;
@@ -26,7 +26,7 @@ public class LinkedList implements List {
     @Override
     public void add(int value) {
         add(value, size);
-        /*Node node = new Node(value, null, null);
+        *//*Node node = new Node(value, null, null);
         if (size == 0) {
             head = tail = node;
             size++;
@@ -36,7 +36,7 @@ public class LinkedList implements List {
             tail = node;
 //            Node nextNode = new Node(value, tail, head.next);
 //            tail.prev = nextNode;
-        }*/
+        }*//*
     }
 
     @Override
@@ -53,7 +53,7 @@ public class LinkedList implements List {
     }
 
     @Override
-    public boolean remove(int value) {
+    public int remove(int value) {
         return false;
     }
 
@@ -74,4 +74,4 @@ public class LinkedList implements List {
         }
         return node.data;
     }
-}
+}*/

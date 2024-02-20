@@ -1,14 +1,24 @@
 package org.example.list;
 
+import org.example.list.exceptions.IndexOutOfListExceptin;
+import org.example.list.exceptions.ListIsEmptyException;
+
 public interface List {
 
-//    int get(int index);
-//    int indexOf(int value);
-    void add(int value);
-    void add (int value, int index);
+    int get(int index) throws IndexOutOfListExceptin;
+
+    int indexOf(int value);
+
+    void add(int value) throws IndexOutOfListExceptin;
+
+    void add(int value, int index) throws IndexOutOfListExceptin;
+
     boolean contains(int value);
-    boolean remove(int value);
+
+    int remove(int value) throws ListIsEmptyException;
+
     int size();
+
     boolean isEmpty();
 
     // git init

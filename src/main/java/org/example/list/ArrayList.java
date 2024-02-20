@@ -1,15 +1,18 @@
 package org.example.list;
 
-import java.util.*;
+import org.example.list.exceptions.IndexOutOfListExceptin;
+import org.example.list.exceptions.ListIsEmptyException;
 
 public class ArrayList implements List {
     private int[] array;
+    private int size = 0;
 
-//    public ArrayList() { array.length = 10
-//    }
+    public ArrayList() {
+        array = new int[10];
+    }
 
-    public ArrayList() { // ArrayList(int capacity) array.length = capacity
-        array = new int[]{};
+    public ArrayList(int capacity) {
+        array = new int[capacity];
     }
 
     public int[] getArray() {
@@ -17,118 +20,124 @@ public class ArrayList implements List {
         // add(12)
         // list.getArray()[0] = 15
         // list.get(0) -> 11
+        trimToSize();
         return array;
     }
 
-    private int size = 0;
 
     @Override
-    public void add(int value) {
-        // add(value, size);
-        if (array.length < size + 1) {
-            expandingArray();
-            array[size] = value;
+    public void add(int value) throws IndexOutOfListExceptin {
+        add(value, size);
+    }
+
+    @Override
+    public void add(int value, int index) throws IndexOutOfListExceptin {
+        // validateIndex() -1 or size = 5, get(6)
+        // create custom exception
+        // [0, 0, 0] -> add(1) -> [1, 0, 0] -> get(1) ?
+        validateIndex(index);
+        expandingArray();
+        if (size == 0) {
+            array[index] = value;
+            size++;
+        } else {
+            for (int i = size - 1; i >= index; i--) {
+                array[i + 1] = array[i];
+            }
+            array[index] = value;
             size++;
         }
     }
 
     @Override
-    public void add(int value, int index) {
-        // validateIndex() -1 or size = 5, get(6)
-        // create custom exception
-        // [0, 0, 0] -> add(1) -> [1, 0, 0] -> get(1) ?
-//        try {
-            if (index == 0 && array.length == 0) {
-                expandingArray();
-                array[index] = value;
-            } else if (index >= array.length) {
-                throw new ArrayIndexOutOfBoundsException();
-            } else if (!(index >= array.length)) {
-                expandingArray();
-                for (int i = array.length - 2; i >= index; i--) {
-                    array[i + 1] = array[i];
-                }
-                array[index] = value;
-            }
-//        } catch (ArrayIndexOutOfBoundsException e) {
-//            System.out.println("This index out of array.");
-//        }
-
-
-
-
-    }
-
-    @Override
     public boolean contains(int value) {
-        if (array.length == 0) { // size
+        if (size == 0) { // size
             return false;
         }
-
-        for (int element : array) {
-            if (value == element) {
+        for (int i = 0; i < size; i++) {
+            if (value == array[i]) {
                 return true;
             }
         }
-
         return false;
     }
 
     @Override
-    public boolean remove(int value) { // return removed value
-        if (array. == 0) {
-            return false;
-        }
-        for (int i = 0; i < array.length; i++) {
+    public int remove(int value) throws ListIsEmptyException { // return removed value
+        arrayListIsEmpty();
+        for (int i = 0; i < size; i++) {
             if (array[i] == value) {
-                for (int j = i + 1; j < array.length; j++) {
+                for (int j = i + 1; j < size; j++) {
                     // array.length = 1_000_000
                     // remove() index - 1 -> shift 999_998
-                    array[i] = array[j];
+                    array[j - 1] = array[j];
                 }
-                narrowingArray();// no need
                 size--;
-                return true;
+                return value;
             }
-
         }
-        return false;
+        return value;
     }
 
     @Override
     public int size() {
-        return array.length; // [0, 0, 0]
-        // add(5) -> [5, 0, 0]
-        // size() -> 3
-        //
+        return size;
+
     }
 
     @Override
     public boolean isEmpty() {
         return size == 0;
-//        if(array.length==0) return true;
-//        return false;
-    }
-
-    private void expandingArray() {
-//        System.arraycopy()
-        int[] targetArray = new int[array.length + 1];
-        for (int i = 0; i < array.length; i++) {
-            targetArray[i] = array[i];
-        }
-        array = targetArray;
-    }
-
-    private void narrowingArray() { // trimToSize() array.length = 151, size = 105
-        int[] array1 = new int[array.length - 1];
-        for (int i = 0; i < array.length - 1; i++) {
-            array1[i] = array[i];
-        }
-        array = array1;
     }
 
     @Override
-    public String toString() {
-        return Arrays.toString(array);
+    public int get(int index) throws IndexOutOfListExceptin {
+        validateIndex(index);
+        return array[index];
     }
+
+    @Override
+    public int indexOf(int value) {
+        for (int i = 0; i < size; i++) {
+            if (array[i] == value) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void expandingArray() {
+        if (size== array.length) {
+            int[] targetArray = new int[(int) (array.length * 1.5 + 1)];
+            System.arraycopy(array, 0, targetArray, 0, array.length);
+            array = targetArray;
+        }
+    }
+
+    //    private void narrowingArray() { // trimToSize() array.length = 151, size = 105
+//        int[] array1 = new int[array.length - 1];
+//        for (int i = 0; i < array.length - 1; i++) {
+//            array1[i] = array[i];
+//        }
+//        array = array1;
+//    }
+    private void trimToSize() {
+        int[] targetArray = new int[size];
+        System.arraycopy(array, 0, targetArray, 0, size);
+        array = targetArray;
+    }
+
+    private void validateIndex(int index) throws IndexOutOfListExceptin {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfListExceptin();
+        }
+
+    }
+
+    private void arrayListIsEmpty() throws ListIsEmptyException {
+        if (isEmpty()) {
+            throw new ListIsEmptyException();
+        }
+    }
+
 }
