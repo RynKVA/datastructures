@@ -135,7 +135,7 @@ public class ArrayList implements List {
     }
 
     private void arrayListIsEmpty() throws ListIsEmptyException {
-        if (isEmpty()) {
+        if (size==0) {
             throw new ListIsEmptyException();
         }
     }
