@@ -5,17 +5,17 @@ import org.example.list.exceptions.ListIsEmptyException;
 
 public interface List {
 
-    int get(int index) throws IndexOutOfListExceptin;
+    int get(int index) throws IndexOutOfListExceptin, ListIsEmptyException;
 
-    int indexOf(int value);
+    int indexOf(int value) throws IndexOutOfListExceptin, ListIsEmptyException;
 
     void add(int value) throws IndexOutOfListExceptin;
 
     void add(int value, int index) throws IndexOutOfListExceptin;
 
-    boolean contains(int value);
+    boolean contains(int value) throws IndexOutOfListExceptin, ListIsEmptyException;
 
-    int remove(int value) throws ListIsEmptyException;
+    int remove(int value) throws ListIsEmptyException, IndexOutOfListExceptin;
 
     int size();
 

@@ -1,4 +1,7 @@
-/*package org.example.list;
+package org.example.list;
+
+import org.example.list.exceptions.IndexOutOfListExceptin;
+import org.example.list.exceptions.ListIsEmptyException;
 
 public class LinkedList implements List {
 
@@ -9,52 +12,175 @@ public class LinkedList implements List {
         Node next;
         Node prev;
 
-        *//*public Node(int data, Node next, Node prev) {
-            this.data = data;
-            this.next = next;
-            this.prev = prev;
-        }*//*
-
         public Node(int data) {
             this.data = data;
         }
+
     }
 
     private Node head;
     private Node tail;
 
     @Override
-    public void add(int value) {
+    public void add(int value) throws IndexOutOfListExceptin {
         add(value, size);
-        *//*Node node = new Node(value, null, null);
-        if (size == 0) {
-            head = tail = node;
-            size++;
-        } else { // add to the end
-            tail.next = node;
-            node.prev = tail;
-            tail = node;
-//            Node nextNode = new Node(value, tail, head.next);
-//            tail.prev = nextNode;
-        }*//*
+//        Node node = new Node(value);
+//        if (size == 0) {
+//            head = tail = node;
+//            size++;
+//        } else { // add to the end
+//            tail.next = node;
+//            node.prev = tail;
+//            tail = node;
+//        }
     }
 
     @Override
-    public void add(int value, int index) {
+    public void add(int value, int index) throws IndexOutOfListExceptin {
         // - add to the empty list (list size = 0)
         // - add to the end
         // - add to the middle of the list
-        // - add to the start (not empty list - add(0, value)
+        // - add to the start (not empty list - add(value, 0)
+        validateIndex(index);
+        if (size == 0) {
+            addInEmptyList(value);
+        } else if (index == 0) {
+            addFirst(value);
+        } else if (index == size) {
+            addLast(value);
+        } else if (index <= size / 2) {
+            addFromHead(value, index);
+        } else if (index > size / 2) {
+            addFromTail(value, index);
+        }
+    }
+
+    public void addFirst(int value) {
+        Node firstNode = new Node(value);
+        head.prev = firstNode;
+        firstNode.next = head;
+        head = firstNode;
+        size++;
+    }
+
+    public void addLast(int value) {
+        Node lastNode = new Node(value);
+        tail.next = lastNode;
+        lastNode.prev = tail;
+        tail = lastNode;
+        size++;
+    }
+
+    private void addInEmptyList(int value) {
+        Node targetNode = new Node(value);
+        head = tail = targetNode;
+        size++;
+    }
+
+    private void addFromHead(int value, int index) throws IndexOutOfListExceptin {
+        validateIndex(index);
+        Node targetNode = new Node(value);
+        Node nodeNext = head;
+        Node nodePrev;
+        for (int i = 0; i < index; i++) {
+            nodeNext = nodeNext.next;
+        }
+        nodePrev = nodeNext.prev;
+        nodePrev.next = targetNode;
+        targetNode.prev = nodePrev;
+        nodeNext.prev = targetNode;
+        targetNode.next = nodeNext;
+        size++;
+    }
+
+    private void addFromTail(int value, int index) throws IndexOutOfListExceptin {
+        validateIndex(index);
+        Node targetNode = new Node(value);
+        Node nodePrev = tail;
+        Node nodeNext;
+        for (int i = size; i > index; i--) {
+            nodePrev = nodePrev.prev;
+        }
+        nodeNext = nodePrev.next;
+        nodePrev.next = targetNode;
+        targetNode.prev = nodePrev;
+        nodeNext.prev = targetNode;
+        targetNode.next = nodeNext;
+        size++;
     }
 
     @Override
-    public boolean contains(int value) {
+    public boolean contains(int value) throws IndexOutOfListExceptin, ListIsEmptyException {
+        for (int i = 0; i < size; i++) {
+            if (value == get(i)) {
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
-    public int remove(int value) {
-        return false;
+    public int remove(int value) throws ListIsEmptyException, IndexOutOfListExceptin {
+        listIsEmpty();
+        if (indexOf(value) == 0) {
+            removeFirst(value);
+        } else if (indexOf(value)==size-1) {
+            removeLast(value);
+        }
+        Node node = head;
+        for (int i = 0; i < size - 1; i++) {
+            node = node.next;
+            if (node.data == value) {
+                Node nodePrev = node.prev;
+                Node nodeNext = node.next;
+                nodePrev.next = nodeNext;
+                nodeNext.prev = nodePrev;
+                node.prev = node.next = null;
+                size--;
+                return value;
+            }
+        }
+        return value;
+    }
+
+    private void removeFirst(int valur) {
+        Node node = head;
+        head = node.next;
+        node.next = null;
+        head.prev = null;
+        size--;
+    }
+
+    private void removeLast(int value) {
+        Node node= tail;
+        tail= node.prev;
+        node.prev=null;
+        tail.next=null;
+        size--;
+    }
+
+  /*  private int returnFromHead(int value) throws ListIsEmptyException {
+        listIsEmpty();
+        Node node = head;
+        for (int i = 0; i < size; i++) {
+            node = node.next;
+            if (node.data == value){
+                Node nodePrev= node.prev;
+                Node nodeNext= node.next;
+                nodePrev.next=nodeNext;
+                nodeNext.prev=nodePrev;
+                node.prev=node.next=null;
+                size--;
+                return node.data;
+            }
+        }
+        return value;
+    }*/
+
+    private int returnFromTail(int value) {
+        Node node = tail;
+
+        return value;
     }
 
     @Override
@@ -64,14 +190,46 @@ public class LinkedList implements List {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
-    private int get(int index) {
+    public int get(int index) throws IndexOutOfListExceptin, ListIsEmptyException {
+        listIsEmpty();
+        validateIndex(index);
         Node node = head;
         for (int i = 0; i < index; i++) {
             node = node.next;
         }
         return node.data;
     }
-}*/
+
+    @Override
+    public int indexOf(int value) throws IndexOutOfListExceptin, ListIsEmptyException {
+        for (int i = 0; i < size; i++) {
+            if (value == get(i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int[] toArray() throws IndexOutOfListExceptin, ListIsEmptyException {
+        int[] arrayOfElements = new int[size];
+        for (int i = 0; i < size; i++) {
+            arrayOfElements[i] = get(i);
+        }
+        return arrayOfElements;
+    }
+
+    private void validateIndex(int index) throws IndexOutOfListExceptin {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfListExceptin();
+        }
+    }
+
+    private void listIsEmpty() throws ListIsEmptyException {
+        if (size == 0) {
+            throw new ListIsEmptyException();
+        }
+    }
+}

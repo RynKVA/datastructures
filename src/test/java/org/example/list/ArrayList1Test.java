@@ -110,23 +110,35 @@ class ArrayList1Test {
     }
 
     @Test
-    void get() throws IndexOutOfListExceptin {
+    void get() throws IndexOutOfListExceptin, ListIsEmptyException {
         assertEquals(5, list.get(0));
         assertEquals(1, list.get(4));
 
-    }@Test
+    }
+
+    @Test
     void get1() throws IndexOutOfListExceptin {
-        assertThrows(IndexOutOfListExceptin.class,() ->{
+        assertThrows(IndexOutOfListExceptin.class, () -> {
             list.get(10);
         });
 
     }
 
     @Test
+    void get2() throws IndexOutOfListExceptin {
+        ArrayList list = new ArrayList() {
+        };
+        assertThrows(ListIsEmptyException.class, () -> {
+            list.get(0);
+        });
+    }
+
+
+    @Test
     void indexOf() {
-        assertEquals(0,list.indexOf(5));
-        assertEquals(4,list.indexOf(1));
-        assertEquals(-1,list.indexOf(6));
+        assertEquals(0, list.indexOf(5));
+        assertEquals(4, list.indexOf(1));
+        assertEquals(-1, list.indexOf(6));
     }
 
     // private boolean, check each element

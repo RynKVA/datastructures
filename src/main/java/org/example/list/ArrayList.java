@@ -64,7 +64,7 @@ public class ArrayList implements List {
 
     @Override
     public int remove(int value) throws ListIsEmptyException { // return removed value
-        arrayListIsEmpty();
+        listIsEmpty();
         for (int i = 0; i < size; i++) {
             if (array[i] == value) {
                 for (int j = i + 1; j < size; j++) {
@@ -91,7 +91,8 @@ public class ArrayList implements List {
     }
 
     @Override
-    public int get(int index) throws IndexOutOfListExceptin {
+    public int get(int index) throws IndexOutOfListExceptin, ListIsEmptyException {
+        listIsEmpty();
         validateIndex(index);
         return array[index];
     }
@@ -134,7 +135,7 @@ public class ArrayList implements List {
 
     }
 
-    private void arrayListIsEmpty() throws ListIsEmptyException {
+    private void listIsEmpty() throws ListIsEmptyException {
         if (size==0) {
             throw new ListIsEmptyException();
         }
