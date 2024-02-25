@@ -1,7 +1,5 @@
 package org.example.list;
 
-import org.example.list.exceptions.IndexOutOfListExceptin;
-import org.example.list.exceptions.ListIsEmptyException;
 
 public class LinkedList extends AbstractList implements List {
 
@@ -25,7 +23,7 @@ public class LinkedList extends AbstractList implements List {
     private Node tail;
 
     @Override
-    public void add(int value) throws IndexOutOfListExceptin {
+    public void add(int value){
         add(value, size);
 //        Node node = new Node(value);
 //        if (size == 0) {
@@ -39,7 +37,7 @@ public class LinkedList extends AbstractList implements List {
     }
 
     @Override
-    public void add(int value, int index) throws IndexOutOfListExceptin {
+    public void add(int value, int index){
         // - add to the empty list (list size = 0)
         // - add to the end
         // - add to the middle of the list
@@ -81,7 +79,7 @@ public class LinkedList extends AbstractList implements List {
         size++;
     }
 
-    private void addFromHead(int value, int index) throws IndexOutOfListExceptin {
+    private void addFromHead(int value, int index){
         validateIndex(index);
         Node targetNode = new Node(value);
         Node nodeNext = head;
@@ -97,7 +95,7 @@ public class LinkedList extends AbstractList implements List {
         size++;
     }
 
-    private void addFromTail(int value, int index) throws IndexOutOfListExceptin {
+    private void addFromTail(int value, int index){
         validateIndex(index);
         Node targetNode = new Node(value);
         Node nodePrev = tail;
@@ -114,18 +112,12 @@ public class LinkedList extends AbstractList implements List {
     }
 
     @Override
-    public boolean contains(int value) throws IndexOutOfListExceptin, ListIsEmptyException {
-        for (int i = 0; i < size; i++) {
-            if (value == get(i)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean contains(int value){
+        return indexOf(value) != -1;
     }
 
     @Override
-    public int remove(int value) throws ListIsEmptyException, IndexOutOfListExceptin {
-        listIsEmpty();
+    public boolean remove(int value){
         if (indexOf(value) == 0) {
             removeFirst(value);
         } else if (indexOf(value)==size-1) {
@@ -141,10 +133,10 @@ public class LinkedList extends AbstractList implements List {
                 nodeNext.prev = nodePrev;
                 node.prev = node.next = null;
                 size--;
-                return value;
+                return true;
             }
         }
-        return value;
+        return false;
     }
 
     private void removeFirst(int valur) {
@@ -197,8 +189,7 @@ public class LinkedList extends AbstractList implements List {
         return size == 0;
     }
 
-    public int get(int index) throws IndexOutOfListExceptin, ListIsEmptyException {
-        listIsEmpty();
+    public int get(int index){
         validateIndex(index);
         Node node = head;
         for (int i = 0; i < index; i++) {
@@ -208,7 +199,7 @@ public class LinkedList extends AbstractList implements List {
     }
 
     @Override
-    public int indexOf(int value) throws IndexOutOfListExceptin, ListIsEmptyException {
+    public int indexOf(int value){
         for (int i = 0; i < size; i++) {
             if (value == get(i)) {
                 return i;
@@ -217,7 +208,7 @@ public class LinkedList extends AbstractList implements List {
         return -1;
     }
 
-    public int[] toArray() throws IndexOutOfListExceptin, ListIsEmptyException {
+    public int[] toArray(){
         int[] arrayOfElements = new int[size];
         for (int i = 0; i < size; i++) {
             arrayOfElements[i] = get(i);
@@ -225,15 +216,10 @@ public class LinkedList extends AbstractList implements List {
         return arrayOfElements;
     }
 
-    private void validateIndex(int index) throws IndexOutOfListExceptin {
+    private void validateIndex(int index){
         if (index < 0 || index > size) {
-            throw new IndexOutOfListExceptin();
+            throw new IndexOutOfBoundsException();
         }
     }
 
-    private void listIsEmpty() throws ListIsEmptyException {
-        if (size == 0) {
-            throw new ListIsEmptyException();
-        }
-    }
 }

@@ -1,10 +1,11 @@
 package org.example.list;
 
-import org.example.list.exceptions.IndexOutOfListExceptin;
-import org.example.list.exceptions.ListIsEmptyException;
+;
 
 //Generics
 public class ArrayList implements List {
+    private final int STANDARDCAPACITY = 10;
+    private final double STANDARDEXTENSION = 1.5;
 
     // move magic numbers to constants
     // replace by system.arraycopy where it's possible
@@ -13,7 +14,7 @@ public class ArrayList implements List {
     private int size = 0;
 
     public ArrayList() {
-        array = new int[10];
+        array = new int[STANDARDCAPACITY];
     }
 
     public ArrayList(int capacity) {
@@ -31,26 +32,19 @@ public class ArrayList implements List {
 
 
     @Override
-    public void add(int value) throws IndexOutOfListExceptin {
+    public void add(int value){
         add(value, size);
     }
 
     @Override
-    public void add(int value, int index) throws IndexOutOfListExceptin {
-        // validateIndex() -1 or size = 5, get(6)
-        // create custom exception
-        // [0, 0, 0] -> add(1) -> [1, 0, 0] -> get(1) ?
+    public void add(int value, int index){
         validateIndex(index);
         expandingArray();
         if (size == 0) {
             array[index] = value;
             size++;
         } else {
-            // [1, 2, 3] -> add(4, 1) -> [1, 4, 2, 3]
-            System.arraycopy(array, index, array, index + 1, size - index); // [1, 0, 2, 3]
-            /*for (int i = size - 1; i >= index; i--) {
-                array[i + 1] = array[i];
-            }*/
+            System.arraycopy(array, index, array, index + 1, size - index);
             array[index] = value;
             size++;
         }
@@ -71,21 +65,19 @@ public class ArrayList implements List {
     }
 
     @Override
-    public int remove(int value) throws ListIsEmptyException { // return removed value
-        listIsEmpty();
+    public boolean remove(int value){
         for (int i = 0; i < size; i++) {
             if (array[i] == value) {
                 // System.arraycopy
+                System.arraycopy(array,indexOf(value)+1,array,indexOf(value),size-(indexOf(value)+1)) ;// [1, 2, 3, 4] -> remove 2 index 1 -> [1, 3, 4]
                 for (int j = i + 1; j < size; j++) {
-                    // array.length = 1_000_000
-                    // remove() index - 1 -> shift 999_998
                     array[j - 1] = array[j];
                 }
                 size--;
-                return value;
+                return true ;
             }
         }
-        return value;
+        return false;
     }
 
     @Override
@@ -100,8 +92,7 @@ public class ArrayList implements List {
     }
 
     @Override
-    public int get(int index) /*throws IndexOutOfListExceptin, ListIsEmptyException */{
-//        listIsEmpty();
+    public int get(int index) {
         validateIndex(index);
         return array[index];
     }
@@ -117,39 +108,23 @@ public class ArrayList implements List {
     }
 
     private void expandingArray() {
-        if (size== array.length) {
-            int[] targetArray = new int[(int) (array.length * 1.5 + 1)];
+        if (size == array.length) {
+            int[] targetArray = new int[(int) (array.length * STANDARDEXTENSION + 1)];
             System.arraycopy(array, 0, targetArray, 0, array.length);
             array = targetArray;
         }
     }
 
-    //    private void narrowingArray() { // trimToSize() array.length = 151, size = 105
-//        int[] array1 = new int[array.length - 1];
-//        for (int i = 0; i < array.length - 1; i++) {
-//            array1[i] = array[i];
-//        }
-//        array = array1;
-//    }
     private void trimToSize() {
         int[] targetArray = new int[size];
         System.arraycopy(array, 0, targetArray, 0, size);
         array = targetArray;
     }
 
-    private void validateIndex(int index) throws IndexOutOfListExceptin {
+    private void validateIndex(int index) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException(); // changed to default exception
-        }
-
-    }
-
-    private void listIsEmpty() { // remove
-        // size = 0
-        // get (0)
-        if (size==0) {
             throw new IndexOutOfBoundsException();
         }
-    }
 
+    }
 }

@@ -1,13 +1,10 @@
 package org.example.list;
 
-import org.example.list.exceptions.IndexOutOfListExceptin;
-import org.example.list.exceptions.ListIsEmptyException;
-
 import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) throws IndexOutOfListExceptin, ListIsEmptyException {
-        LinkedList list = new LinkedList();
+    public static void main(String[] args){
+     /*   LinkedList list = new LinkedList();
         list.add(5);
         list.add(8, 1);
         list.add(3);
@@ -27,12 +24,12 @@ public class Main {
         System.out.println(Arrays.toString(list.toArray()));
         System.out.println(list.size());
         System.out.println(list.contains(0));
-        System.out.println(list.indexOf(177));
+        System.out.println(list.indexOf(177));*/
 //        System.out.println(list.get());
-      /*  ArrayList list=new ArrayList(){};
+        ArrayList list=new ArrayList(){};
         System.out.println(list.get(0));
         System.out.println(list.isEmpty());
-        System.out.println(Arrays.toString(list.getArray()));*/
+        System.out.println(Arrays.toString(list.getArray()));
 
     }
 }

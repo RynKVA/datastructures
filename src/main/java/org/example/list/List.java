@@ -1,21 +1,17 @@
 package org.example.list;
-
-import org.example.list.exceptions.IndexOutOfListExceptin;
-import org.example.list.exceptions.ListIsEmptyException;
-
 public interface List {
 
-    int get(int index) throws IndexOutOfListExceptin, ListIsEmptyException;
+    int get(int index);
 
-    int indexOf(int value) throws IndexOutOfListExceptin, ListIsEmptyException;
+    int indexOf(int value);
 
-    void add(int value) throws IndexOutOfListExceptin;
+    void add(int value);
 
-    void add(int value, int index) throws IndexOutOfListExceptin;
+    void add(int value, int index);
 
-    boolean contains(int value) throws IndexOutOfListExceptin, ListIsEmptyException;
+    boolean contains(int value);
 
-    boolean remove(int value) throws ListIsEmptyException, IndexOutOfListExceptin;
+    boolean remove(int value);
 
     int size();
 
