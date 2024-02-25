@@ -15,11 +15,13 @@ public interface List {
 
     boolean contains(int value) throws IndexOutOfListExceptin, ListIsEmptyException;
 
-    int remove(int value) throws ListIsEmptyException, IndexOutOfListExceptin;
+    boolean remove(int value) throws ListIsEmptyException, IndexOutOfListExceptin;
 
     int size();
 
     boolean isEmpty();
+
+    String toString();
 
     // git init
     // git add

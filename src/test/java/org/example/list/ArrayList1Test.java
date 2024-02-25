@@ -3,10 +3,12 @@ package org.example.list;
 import org.example.list.exceptions.IndexOutOfListExceptin;
 import org.example.list.exceptions.ListIsEmptyException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +32,9 @@ class ArrayList1Test {
     }
 
     @Test
-    void add2() throws IndexOutOfListExceptin {
+    @DisplayName("Add three element ..")
+    void whenAddedThreeElementsThenSizeGrowsOnThree() throws IndexOutOfListExceptin {
+//    void add2() throws IndexOutOfListExceptin {
         ArrayList list = new ArrayList();
         list.add(0);
         list.add(0);
@@ -54,7 +58,6 @@ class ArrayList1Test {
         list.add(3, 0);
         int[] array = {3};
         assertArrayEquals(list.getArray(), array);
-
     }
 
     @Test
@@ -66,7 +69,7 @@ class ArrayList1Test {
     }
 
     @Test
-    void AddByIndex2() throws IndexOutOfListExceptin {
+    void AddByIndex2() {
         assertThrows(IndexOutOfListExceptin.class, () -> {
             list.add(3, 11);
         });
@@ -142,4 +145,13 @@ class ArrayList1Test {
     }
 
     // private boolean, check each element
+
+     private int[] toArray(ArrayList list) throws ListIsEmptyException, IndexOutOfListExceptin {
+         int[] arrayOfElements = new int[list.size()];
+         for (int i = 0; i < list.size(); i++) {
+             arrayOfElements[i] = list.get(i);
+         }
+         return arrayOfElements;
+
+     }
 }

@@ -3,7 +3,10 @@ package org.example.list;
 import org.example.list.exceptions.IndexOutOfListExceptin;
 import org.example.list.exceptions.ListIsEmptyException;
 
-public class LinkedList implements List {
+public class LinkedList extends AbstractList implements List {
+
+    // simplify add
+    // fix remove
 
     private int size = 0;
 
@@ -53,6 +56,7 @@ public class LinkedList implements List {
         } else if (index > size / 2) {
             addFromTail(value, index);
         }
+        // getNode() ->
     }
 
     public void addFirst(int value) {

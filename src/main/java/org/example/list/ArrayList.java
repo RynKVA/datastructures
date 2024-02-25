@@ -3,7 +3,12 @@ package org.example.list;
 import org.example.list.exceptions.IndexOutOfListExceptin;
 import org.example.list.exceptions.ListIsEmptyException;
 
+//Generics
 public class ArrayList implements List {
+
+    // move magic numbers to constants
+    // replace by system.arraycopy where it's possible
+    // move toArray method to test
     private int[] array;
     private int size = 0;
 
@@ -41,9 +46,11 @@ public class ArrayList implements List {
             array[index] = value;
             size++;
         } else {
-            for (int i = size - 1; i >= index; i--) {
+            // [1, 2, 3] -> add(4, 1) -> [1, 4, 2, 3]
+            System.arraycopy(array, index, array, index + 1, size - index); // [1, 0, 2, 3]
+            /*for (int i = size - 1; i >= index; i--) {
                 array[i + 1] = array[i];
-            }
+            }*/
             array[index] = value;
             size++;
         }
@@ -51,7 +58,8 @@ public class ArrayList implements List {
 
     @Override
     public boolean contains(int value) {
-        if (size == 0) { // size
+        return indexOf(value) != -1;
+        /*if (size == 0) { // size
             return false;
         }
         for (int i = 0; i < size; i++) {
@@ -59,7 +67,7 @@ public class ArrayList implements List {
                 return true;
             }
         }
-        return false;
+        return false;*/
     }
 
     @Override
@@ -67,6 +75,7 @@ public class ArrayList implements List {
         listIsEmpty();
         for (int i = 0; i < size; i++) {
             if (array[i] == value) {
+                // System.arraycopy
                 for (int j = i + 1; j < size; j++) {
                     // array.length = 1_000_000
                     // remove() index - 1 -> shift 999_998
@@ -91,8 +100,8 @@ public class ArrayList implements List {
     }
 
     @Override
-    public int get(int index) throws IndexOutOfListExceptin, ListIsEmptyException {
-        listIsEmpty();
+    public int get(int index) /*throws IndexOutOfListExceptin, ListIsEmptyException */{
+//        listIsEmpty();
         validateIndex(index);
         return array[index];
     }
@@ -130,14 +139,16 @@ public class ArrayList implements List {
 
     private void validateIndex(int index) throws IndexOutOfListExceptin {
         if (index < 0 || index > size) {
-            throw new IndexOutOfListExceptin();
+            throw new IndexOutOfBoundsException(); // changed to default exception
         }
 
     }
 
-    private void listIsEmpty() throws ListIsEmptyException {
+    private void listIsEmpty() { // remove
+        // size = 0
+        // get (0)
         if (size==0) {
-            throw new ListIsEmptyException();
+            throw new IndexOutOfBoundsException();
         }
     }
 
