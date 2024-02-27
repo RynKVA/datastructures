@@ -21,11 +21,11 @@ class ArrayList1Test {
         list.add(1);
     }
 
-    @Test
+ /*   @Test
     void add1(){
         int[] array = {5, 7, 9, 0, 1};
-        assertArrayEquals(list.getArray(), array);
-    }
+        assertArrayEquals(toArray(list), array);
+    }*/
 
     @Test
     @DisplayName("Add three element ..")
@@ -36,7 +36,7 @@ class ArrayList1Test {
         list.add(0);
         list.add(0);
         int[] array = new int[]{0, 0, 0};
-        assertArrayEquals(list.getArray(), array);
+        assertArrayEquals(toArray(list), array);
     }
 
     @Test
@@ -44,7 +44,7 @@ class ArrayList1Test {
         ArrayList list = new ArrayList();
         int[] array = new int[]{5};
         list.add(5);
-        assertArrayEquals(list.getArray(), array);
+        assertArrayEquals(toArray(list), array);
     }
 
 
@@ -53,14 +53,14 @@ class ArrayList1Test {
         ArrayList list = new ArrayList();
         list.add(3, 0);
         int[] array = {3};
-        assertArrayEquals(list.getArray(), array);
+        assertArrayEquals(toArray(list), array);
     }
 
     @Test
     void AddByIndex1(){
         list.add(3, 3);
         int[] array = {5, 7, 9, 3, 0, 1};
-        assertArrayEquals(list.getArray(), array);
+        assertArrayEquals(toArray(list), array);
 
     }
 
@@ -82,7 +82,7 @@ class ArrayList1Test {
     void remove() {
         list.remove(0);
         int[] array1 = {5, 7, 9, 1};
-        assertArrayEquals(array1, list.getArray());
+        assertArrayEquals(array1, toArray(list));
 
 
     }

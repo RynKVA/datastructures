@@ -1,12 +1,14 @@
 package org.example.list;
 
 
+import java.util.Arrays;
+
 public class LinkedList extends AbstractList implements List {
 
-    // simplify add
-    // fix remove
+    // simplify add +
+    // fix remove +
+    // overriding method toString +
 
-    private int size = 0;
 
     private static class Node {
         int data;
@@ -23,25 +25,12 @@ public class LinkedList extends AbstractList implements List {
     private Node tail;
 
     @Override
-    public void add(int value){
+    public void add(int value) {
         add(value, size);
-//        Node node = new Node(value);
-//        if (size == 0) {
-//            head = tail = node;
-//            size++;
-//        } else { // add to the end
-//            tail.next = node;
-//            node.prev = tail;
-//            tail = node;
-//        }
     }
 
     @Override
-    public void add(int value, int index){
-        // - add to the empty list (list size = 0)
-        // - add to the end
-        // - add to the middle of the list
-        // - add to the start (not empty list - add(value, 0)
+    public void add(int value, int index) {
         validateIndex(index);
         if (size == 0) {
             addInEmptyList(value);
@@ -49,12 +38,15 @@ public class LinkedList extends AbstractList implements List {
             addFirst(value);
         } else if (index == size) {
             addLast(value);
-        } else if (index <= size / 2) {
-            addFromHead(value, index);
-        } else if (index > size / 2) {
-            addFromTail(value, index);
+        } else {
+            addFromHeadOrTail(value, index);
         }
-        // getNode() ->
+    }
+
+    private void addInEmptyList(int value) {
+        Node targetNode = new Node(value);
+        head = tail = targetNode;
+        size++;
     }
 
     public void addFirst(int value) {
@@ -73,37 +65,21 @@ public class LinkedList extends AbstractList implements List {
         size++;
     }
 
-    private void addInEmptyList(int value) {
-        Node targetNode = new Node(value);
-        head = tail = targetNode;
-        size++;
-    }
-
-    private void addFromHead(int value, int index){
-        validateIndex(index);
-        Node targetNode = new Node(value);
-        Node nodeNext = head;
-        Node nodePrev;
-        for (int i = 0; i < index; i++) {
-            nodeNext = nodeNext.next;
-        }
-        nodePrev = nodeNext.prev;
-        nodePrev.next = targetNode;
-        targetNode.prev = nodePrev;
-        nodeNext.prev = targetNode;
-        targetNode.next = nodeNext;
-        size++;
-    }
-
-    private void addFromTail(int value, int index){
-        validateIndex(index);
+    private void addFromHeadOrTail(int value, int index) {
         Node targetNode = new Node(value);
         Node nodePrev = tail;
-        Node nodeNext;
-        for (int i = size; i > index; i--) {
-            nodePrev = nodePrev.prev;
+        Node nodeNext = head;
+        if (index <= size / 2) {
+            for (int i = 0; i < index; i++) {
+                nodeNext = nodeNext.next;
+            }
+            nodePrev = nodeNext.prev;
+        } else {
+            for (int i = size; i > index; i--) {
+                nodePrev = nodePrev.prev;
+            }
+            nodeNext = nodePrev.next;
         }
-        nodeNext = nodePrev.next;
         nodePrev.next = targetNode;
         targetNode.prev = nodePrev;
         nodeNext.prev = targetNode;
@@ -111,17 +87,21 @@ public class LinkedList extends AbstractList implements List {
         size++;
     }
 
+
     @Override
-    public boolean contains(int value){
+    public boolean contains(int value) {
         return indexOf(value) != -1;
     }
 
+
     @Override
-    public boolean remove(int value){
+    public boolean remove(int value) {
         if (indexOf(value) == 0) {
             removeFirst(value);
-        } else if (indexOf(value)==size-1) {
+            return true;
+        } else if (indexOf(value) == size - 1) {
             removeLast(value);
+            return true;
         }
         Node node = head;
         for (int i = 0; i < size - 1; i++) {
@@ -148,48 +128,28 @@ public class LinkedList extends AbstractList implements List {
     }
 
     private void removeLast(int value) {
-        Node node= tail;
-        tail= node.prev;
-        node.prev=null;
-        tail.next=null;
+        Node node = tail;
+        tail = node.prev;
+        node.prev = null;
+        tail.next = null;
         size--;
     }
 
-  /*  private int returnFromHead(int value) throws ListIsEmptyException {
-        listIsEmpty();
-        Node node = head;
-        for (int i = 0; i < size; i++) {
-            node = node.next;
-            if (node.data == value){
-                Node nodePrev= node.prev;
-                Node nodeNext= node.next;
-                nodePrev.next=nodeNext;
-                nodeNext.prev=nodePrev;
-                node.prev=node.next=null;
-                size--;
-                return node.data;
-            }
-        }
-        return value;
-    }*/
-
-    private int returnFromTail(int value) {
-        Node node = tail;
-
-        return value;
-    }
 
     @Override
     public int size() {
         return size;
     }
 
+
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
-    public int get(int index){
+
+    public int get(int index) {
+        listISEmpty();
         validateIndex(index);
         Node node = head;
         for (int i = 0; i < index; i++) {
@@ -198,8 +158,9 @@ public class LinkedList extends AbstractList implements List {
         return node.data;
     }
 
+
     @Override
-    public int indexOf(int value){
+    public int indexOf(int value) {
         for (int i = 0; i < size; i++) {
             if (value == get(i)) {
                 return i;
@@ -207,19 +168,4 @@ public class LinkedList extends AbstractList implements List {
         }
         return -1;
     }
-
-    public int[] toArray(){
-        int[] arrayOfElements = new int[size];
-        for (int i = 0; i < size; i++) {
-            arrayOfElements[i] = get(i);
-        }
-        return arrayOfElements;
-    }
-
-    private void validateIndex(int index){
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException();
-        }
-    }
-
 }
