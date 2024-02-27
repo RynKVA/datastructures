@@ -48,12 +48,10 @@ public class ArrayList extends AbstractList implements List {
 
     @Override
     public boolean remove(int value) {
+        listISEmpty();
         for (int i = 0; i < size; i++) {
             if (array[i] == value) {
                 System.arraycopy(array, indexOf(value) + 1, array, indexOf(value), size - (indexOf(value) + 1));
-                for (int j = i + 1; j < size; j++) {
-                    array[j - 1] = array[j];
-                }
                 size--;
                 return true;
             }

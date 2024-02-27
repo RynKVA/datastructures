@@ -96,6 +96,7 @@ public class LinkedList extends AbstractList implements List {
 
     @Override
     public boolean remove(int value) {
+        listISEmpty();
         if (indexOf(value) == 0) {
             removeFirst(value);
             return true;
@@ -167,5 +168,16 @@ public class LinkedList extends AbstractList implements List {
             }
         }
         return -1;
+    }
+
+    @Override
+    public String toString() {
+        int[] array= new int[size];
+        Node node= head;
+        for (int i=0; i<size;i++){
+            array[i]= node.data;
+            node=node.next;
+        }
+        return Arrays.toString(array);
     }
 }

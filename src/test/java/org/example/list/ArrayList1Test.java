@@ -30,7 +30,7 @@ class ArrayList1Test {
     @Test
     @DisplayName("Add three element ..")
     void whenAddedThreeElementsThenSizeGrowsOnThree(){
-//    void add2() throws IndexOutOfListExceptin {
+//    void add2() throws IndexOutOfListException {
         ArrayList list = new ArrayList();
         list.add(0);
         list.add(0);
