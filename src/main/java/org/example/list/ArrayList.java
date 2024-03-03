@@ -1,6 +1,7 @@
 package org.example.list;
 
 import java.util.Arrays;
+import java.util.StringJoiner;
 
 // move magic numbers to constants +
 // replace by system.arraycopy where it's possible +
@@ -8,13 +9,13 @@ import java.util.Arrays;
 // overriding method toString +
 //Generics
 public class ArrayList extends AbstractList implements List {
-    private final int STANDARDCAPACITY = 10;
-    private final double STANDARDEXTENSION = 1.5;
+    private static final int DEFAULT_CAPACITY = 10;
+    private static final double DEFAULT_EXTENSION = 1.5;
     private int[] array;
 
 
     public ArrayList() {
-        array = new int[STANDARDCAPACITY];
+        array = new int[DEFAULT_CAPACITY];
     }
 
     public ArrayList(int capacity) {
@@ -31,14 +32,11 @@ public class ArrayList extends AbstractList implements List {
     public void add(int value, int index) {
         validateIndex(index);
         expandingArray();
-        if (size == 0) {
-            array[index] = value;
-            size++;
-        } else {
+        if (size != 0) {
             System.arraycopy(array, index, array, index + 1, size - index);
-            array[index] = value;
-            size++;
         }
+        array[index] = value;
+        size++;
     }
 
     @Override
@@ -89,7 +87,7 @@ public class ArrayList extends AbstractList implements List {
 
     private void expandingArray() {
         if (size == array.length) {
-            int[] targetArray = new int[(int) (array.length * STANDARDEXTENSION + 1)];
+            int[] targetArray = new int[(int) (array.length * DEFAULT_EXTENSION + 1)];
             System.arraycopy(array, 0, targetArray, 0, array.length);
             array = targetArray;
         }
@@ -101,8 +99,13 @@ public class ArrayList extends AbstractList implements List {
         array = targetArray;
     }
 
+    @Override
     public String toString (){
         trimToSize();
-        return Arrays.toString(array);
+        StringJoiner joiner = new StringJoiner(", ", "[", "]");
+        return joiner.toString(); // [1, 4, 7, 9]
     }
+    // array.length = 100, list.size = 51
+    // toString
+    // list.add() -> expanding
 }

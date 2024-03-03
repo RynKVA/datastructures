@@ -4,15 +4,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class ArrayList1Test {
-    private final ArrayList list = new ArrayList();
-    //
+class ArrayListTest extends ListTest {
 
-    @BeforeEach
+    // Rework tests
+    // Array list - toString
+    // move to AbstractList common part
+    // clean code
+    // Generics -> List<String> or List<Integer> or List<CustomObject>
+    // <? extends AnyObject>, <? super AnyObject> (AnyObject from hierarchy)
+    // https://www.youtube.com/watch?v=MniNZsyjH9E&list=PL6jg6AGdCNaX1yIJpX4sgALBTmTVc_uOJ
+
+    public ArrayListTest() {
+        super(new ArrayList());
+    }
+
+  /*  @BeforeEach
     void before(){
         list.add(5);
         list.add(7);
@@ -21,11 +29,11 @@ class ArrayList1Test {
         list.add(1);
     }
 
- /*   @Test
+ *//*   @Test
     void add1(){
         int[] array = {5, 7, 9, 0, 1};
         assertArrayEquals(toArray(list), array);
-    }*/
+    }*//*
 
     @Test
     @DisplayName("Add three element ..")
@@ -144,5 +152,5 @@ class ArrayList1Test {
          }
          return arrayOfElements;
 
-     }
+     }*/
 }

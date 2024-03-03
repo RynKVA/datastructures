@@ -7,8 +7,12 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ListTest {
-    private List list
+    private List list;
     private int[] array;
+
+    ListTest(List list){
+        this.list=list;
+    }
 
 
     @Test
@@ -58,8 +62,9 @@ class ListTest {
         list.add(4);
         list.add(3);
         list.add(2);
-        assertThrows(IndexOutOfBoundsException.class,
+        IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> list.add(0, 7));
+        assertEquals(exception.getMessage(),"Index out of List.");
     }
 
     @Test
@@ -134,8 +139,9 @@ class ListTest {
 
     @Test
     void whenElementIsRemovedFromEmptyListExpectIndexOutOFBoundsException() {
-        assertThrows(IndexOutOfBoundsException.class,
+        IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> list.remove(5));
+        assertEquals(exception.getMessage(),"List is empty.");
     }
 
     @Test
@@ -176,8 +182,9 @@ class ListTest {
 
     @Test
     void getValueFromIndexWhenListIsEmpty() {
-        assertThrows(IndexOutOfBoundsException.class,
+        IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> list.get(0));
+        assertEquals(exception.getMessage(),"List is empty.");
     }
 
     @Test
@@ -187,8 +194,9 @@ class ListTest {
         list.add(4);
         list.add(3);
         list.add(2);
-        assertThrows(IndexOutOfBoundsException.class,
+        IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> list.get(6));
+        assertEquals(exception.getMessage(),"Index out of List.");
     }
 
     @Test

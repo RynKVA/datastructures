@@ -98,7 +98,7 @@ public class LinkedList extends AbstractList implements List {
     public boolean remove(int value) {
         listISEmpty();
         if (indexOf(value) == 0) {
-            removeFirst(value);
+            removeFirst();
             return true;
         } else if (indexOf(value) == size - 1) {
             removeLast(value);
@@ -108,11 +108,13 @@ public class LinkedList extends AbstractList implements List {
         for (int i = 0; i < size - 1; i++) {
             node = node.next;
             if (node.data == value) {
-                Node nodePrev = node.prev;
-                Node nodeNext = node.next;
-                nodePrev.next = nodeNext;
-                nodeNext.prev = nodePrev;
-                node.prev = node.next = null;
+                node.prev.next = node.next;
+                node.next.prev = node.prev;
+//                Node nodePrev = node.prev;
+//                Node nodeNext = node.next;
+//                nodePrev.next = nodeNext;
+//                nodeNext.prev = nodePrev;
+//                node.prev = node.next = null;
                 size--;
                 return true;
             }
@@ -120,11 +122,13 @@ public class LinkedList extends AbstractList implements List {
         return false;
     }
 
-    private void removeFirst(int valur) {
-        Node node = head;
-        head = node.next;
-        node.next = null;
+    private void removeFirst() {
+        head = head.next;
         head.prev = null;
+//        Node node = head;
+//        head = node.next;
+//        node.next = null;
+//        head.prev = null;
         size--;
     }
 
