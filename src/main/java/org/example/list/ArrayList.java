@@ -7,8 +7,8 @@ import java.util.StringJoiner;
 // replace by system.arraycopy where it's possible +
 // move toArray method to test +
 // overriding method toString +
-//Generics
-public class ArrayList extends AbstractList implements List {
+// Generics
+public class ArrayList extends AbstractList {
     private static final int DEFAULT_CAPACITY = 10;
     private static final double DEFAULT_EXTENSION = 1.5;
     private int[] array;
@@ -20,12 +20,6 @@ public class ArrayList extends AbstractList implements List {
 
     public ArrayList(int capacity) {
         array = new int[capacity];
-    }
-
-
-    @Override
-    public void add(int value) {
-        add(value, size);
     }
 
     @Override
@@ -40,11 +34,6 @@ public class ArrayList extends AbstractList implements List {
     }
 
     @Override
-    public boolean contains(int value) {
-        return indexOf(value) != -1;
-    }
-
-    @Override
     public boolean remove(int value) {
         listISEmpty();
         for (int i = 0; i < size; i++) {
@@ -55,17 +44,6 @@ public class ArrayList extends AbstractList implements List {
             }
         }
         return false;
-    }
-
-    @Override
-    public int size() {
-        return size;
-
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
     }
 
     @Override
@@ -93,19 +71,18 @@ public class ArrayList extends AbstractList implements List {
         }
     }
 
-    private void trimToSize() {
+    public void trimToSize() {
         int[] targetArray = new int[size];
         System.arraycopy(array, 0, targetArray, 0, size);
         array = targetArray;
     }
 
     @Override
-    public String toString (){
-        trimToSize();
+    public String toString() {
         StringJoiner joiner = new StringJoiner(", ", "[", "]");
-        return joiner.toString(); // [1, 4, 7, 9]
+        for (int i = 0; i < size; i++) {
+            joiner.add(String.valueOf(array[i]));
+        }
+        return joiner.toString();
     }
-    // array.length = 100, list.size = 51
-    // toString
-    // list.add() -> expanding
 }

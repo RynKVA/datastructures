@@ -2,8 +2,9 @@ package org.example.list;
 
 
 import java.util.Arrays;
+import java.util.StringJoiner;
 
-public class LinkedList extends AbstractList implements List {
+public class LinkedList extends AbstractList {
 
     // simplify add +
     // fix remove +
@@ -24,10 +25,6 @@ public class LinkedList extends AbstractList implements List {
     private Node head;
     private Node tail;
 
-    @Override
-    public void add(int value) {
-        add(value, size);
-    }
 
     @Override
     public void add(int value, int index) {
@@ -87,13 +84,6 @@ public class LinkedList extends AbstractList implements List {
         size++;
     }
 
-
-    @Override
-    public boolean contains(int value) {
-        return indexOf(value) != -1;
-    }
-
-
     @Override
     public boolean remove(int value) {
         listISEmpty();
@@ -110,11 +100,6 @@ public class LinkedList extends AbstractList implements List {
             if (node.data == value) {
                 node.prev.next = node.next;
                 node.next.prev = node.prev;
-//                Node nodePrev = node.prev;
-//                Node nodeNext = node.next;
-//                nodePrev.next = nodeNext;
-//                nodeNext.prev = nodePrev;
-//                node.prev = node.next = null;
                 size--;
                 return true;
             }
@@ -125,10 +110,6 @@ public class LinkedList extends AbstractList implements List {
     private void removeFirst() {
         head = head.next;
         head.prev = null;
-//        Node node = head;
-//        head = node.next;
-//        node.next = null;
-//        head.prev = null;
         size--;
     }
 
@@ -139,19 +120,6 @@ public class LinkedList extends AbstractList implements List {
         tail.next = null;
         size--;
     }
-
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
 
     public int get(int index) {
         listISEmpty();
@@ -176,12 +144,12 @@ public class LinkedList extends AbstractList implements List {
 
     @Override
     public String toString() {
-        int[] array= new int[size];
-        Node node= head;
-        for (int i=0; i<size;i++){
-            array[i]= node.data;
-            node=node.next;
+        StringJoiner joiner = new StringJoiner(", ", "[", "]");
+        Node node = head;
+        for (int i = 0; i < size; i++) {
+            joiner.add(String.valueOf(node.data));
+            node = node.next;
         }
-        return Arrays.toString(array);
+        return joiner.toString();
     }
 }

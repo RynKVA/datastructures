@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        LinkedList list = new LinkedList();
+/*        LinkedList list = new LinkedList();
         list.add(5);
         list.add(3);
         list.add(9);
@@ -20,9 +20,9 @@ public class Main {
         System.out.println(list.toString());
         System.out.println(list.size());
         System.out.println(list.contains(0));
-        System.out.println(list.indexOf(177));
+        System.out.println(list.indexOf(177));*/
 //        System.out.println(list.get());
-       /* ArrayList list=new ArrayList();
+        ArrayList list=new ArrayList();
         list.add(5);
         list.add(4);
         list.add(7);
@@ -31,6 +31,5 @@ public class Main {
         System.out.println(list.get(0));
         System.out.println(list.isEmpty());
         System.out.println(list.toString());
-*/
     }
 }
