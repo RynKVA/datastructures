@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ArrayListTest extends ListTest {
+class ArrayListTest  extends ListTest {
 
     // Rework tests +
     // Array list - toString +
@@ -18,9 +18,9 @@ class ArrayListTest extends ListTest {
 //    suppressed exception - READ
 //    try {} catch
 //    try with resources
-    private final List list=getList();
+    private final List <Integer> list=getList();
     @Override
-    List getList() {
-        return new ArrayList();
+    List<Integer> getList() {
+        return new ArrayList<>();
     }
 }

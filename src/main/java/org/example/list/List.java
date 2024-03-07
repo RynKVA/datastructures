@@ -1,17 +1,19 @@
 package org.example.list;
-public interface List {
+public interface List <T> {
 
-    int get(int index);
+    Object get(int index);
 
-    int indexOf(int value);
+    int indexOf(T value);
 
-    void add(int value);
+    void add(T value);
 
-    void add(int value, int index);
+    void add(T value, int index);
 
-    boolean contains(int value);
+    boolean contains(T value);
 
-    boolean remove(int value);
+    boolean remove(T value);
+
+    Object remove(int index);
 
     int size();
 

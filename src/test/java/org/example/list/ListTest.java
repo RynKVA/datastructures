@@ -8,9 +8,9 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class ListTest {
-    protected static List emptyList;
-    protected static List listWithSomeElements;
+abstract class ListTest  {
+    private List  emptyList;
+    private List  listWithSomeElements;
     private int[] array;
 
     abstract List getList();

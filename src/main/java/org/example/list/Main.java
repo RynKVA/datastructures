@@ -1,7 +1,4 @@
 package org.example.list;
-
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
 /*        LinkedList list = new LinkedList();
@@ -22,14 +19,7 @@ public class Main {
         System.out.println(list.contains(0));
         System.out.println(list.indexOf(177));*/
 //        System.out.println(list.get());
-        ArrayList list=new ArrayList();
-        list.add(5);
-        list.add(4);
-        list.add(7);
-        list.add(9);
-        list.add(512);
-        System.out.println(list.get(0));
-        System.out.println(list.isEmpty());
-        System.out.println(list.toString());
+        LinkedList<String >list = new LinkedList<>();
+        System.out.println(list.remove( "5"));
     }
 }

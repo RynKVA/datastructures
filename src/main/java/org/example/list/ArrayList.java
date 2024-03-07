@@ -1,6 +1,5 @@
 package org.example.list;
 
-import java.util.Arrays;
 import java.util.StringJoiner;
 
 // move magic numbers to constants +
@@ -8,23 +7,23 @@ import java.util.StringJoiner;
 // move toArray method to test +
 // overriding method toString +
 // Generics
-public class ArrayList extends AbstractList {
+public class ArrayList <T> extends AbstractList <T> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final double DEFAULT_EXTENSION = 1.5;
-    private int[] array;
+    private Object[] array;
 
 
     public ArrayList() {
-        array = new int[DEFAULT_CAPACITY];
+        array = new Object[DEFAULT_CAPACITY];
     }
 
     public ArrayList(int capacity) {
-        array = new int[capacity];
+        array = new Object[capacity];
     }
 
     @Override
-    public void add(int value, int index) {
-        validateIndex(index);
+    public void add(T value, int index) {
+        validateIndexOnAdd(index);
         expandingArray();
         if (size != 0) {
             System.arraycopy(array, index, array, index + 1, size - index);
@@ -34,10 +33,9 @@ public class ArrayList extends AbstractList {
     }
 
     @Override
-    public boolean remove(int value) {
-        listISEmpty();
+    public boolean remove(T value) {
         for (int i = 0; i < size; i++) {
-            if (array[i] == value) {
+            if (array[i].equals(value)) {
                 System.arraycopy(array, indexOf(value) + 1, array, indexOf(value), size - (indexOf(value) + 1));
                 size--;
                 return true;
@@ -45,18 +43,28 @@ public class ArrayList extends AbstractList {
         }
         return false;
     }
+    @Override
+    public Object remove(int index) {
+        validateIndex(index);
+        if (index==size) {
+            size--;
+            return array[index];
+        }
+        System.arraycopy(array, index + 1, array, index, size - (index + 1));
+        size--;
+        return array[index];
+    }
 
     @Override
-    public int get(int index) {
-        listISEmpty();
+    public Object get(int index) {
         validateIndex(index);
         return array[index];
     }
 
     @Override
-    public int indexOf(int value) {
+    public int indexOf(T value) {
         for (int i = 0; i < size; i++) {
-            if (array[i] == value) {
+            if (array[i].equals(value)) {
                 return i;
             }
         }
@@ -65,14 +73,14 @@ public class ArrayList extends AbstractList {
 
     private void expandingArray() {
         if (size == array.length) {
-            int[] targetArray = new int[(int) (array.length * DEFAULT_EXTENSION + 1)];
+            Object[] targetArray =  new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
             System.arraycopy(array, 0, targetArray, 0, array.length);
             array = targetArray;
         }
     }
 
     public void trimToSize() {
-        int[] targetArray = new int[size];
+        Object[] targetArray = new Object[size];
         System.arraycopy(array, 0, targetArray, 0, size);
         array = targetArray;
     }

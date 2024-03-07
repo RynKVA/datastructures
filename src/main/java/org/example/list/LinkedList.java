@@ -1,22 +1,20 @@
 package org.example.list;
 
-
-import java.util.Arrays;
 import java.util.StringJoiner;
 
-public class LinkedList extends AbstractList {
+public class LinkedList<T> extends AbstractList<T> {
 
     // simplify add +
     // fix remove +
     // overriding method toString +
 
 
-    private static class Node {
-        int data;
+    private class Node {
+        T data;
         Node next;
         Node prev;
 
-        public Node(int data) {
+        public Node(T data) {
             this.data = data;
         }
 
@@ -27,8 +25,8 @@ public class LinkedList extends AbstractList {
 
 
     @Override
-    public void add(int value, int index) {
-        validateIndex(index);
+    public void add(T value, int index) {
+        validateIndexOnAdd(index);
         if (size == 0) {
             addInEmptyList(value);
         } else if (index == 0) {
@@ -40,13 +38,13 @@ public class LinkedList extends AbstractList {
         }
     }
 
-    private void addInEmptyList(int value) {
+    private void addInEmptyList(T value) {
         Node targetNode = new Node(value);
         head = tail = targetNode;
         size++;
     }
 
-    public void addFirst(int value) {
+    public void addFirst(T value) {
         Node firstNode = new Node(value);
         head.prev = firstNode;
         firstNode.next = head;
@@ -54,7 +52,7 @@ public class LinkedList extends AbstractList {
         size++;
     }
 
-    public void addLast(int value) {
+    public void addLast(T value) {
         Node lastNode = new Node(value);
         tail.next = lastNode;
         lastNode.prev = tail;
@@ -62,7 +60,7 @@ public class LinkedList extends AbstractList {
         size++;
     }
 
-    private void addFromHeadOrTail(int value, int index) {
+    private void addFromHeadOrTail(T value, int index) {
         Node targetNode = new Node(value);
         Node nodePrev = tail;
         Node nodeNext = head;
@@ -85,13 +83,12 @@ public class LinkedList extends AbstractList {
     }
 
     @Override
-    public boolean remove(int value) {
-        listISEmpty();
+    public boolean remove(T value) {
         if (indexOf(value) == 0) {
             removeFirst();
             return true;
         } else if (indexOf(value) == size - 1) {
-            removeLast(value);
+            removeLast();
             return true;
         }
         Node node = head;
@@ -107,22 +104,55 @@ public class LinkedList extends AbstractList {
         return false;
     }
 
+
+    @Override
+    public Object remove(int index) {
+        validateIndex(index);
+        Object removedValue = get(index);
+        if (index == 0){
+            removeFirst();
+            return removedValue;
+        } else if (index == size-1) {
+            removeLast();
+            return removedValue;
+        }else {
+            Node targetNode = findNode(index);
+            targetNode.prev.next = targetNode.next;
+            targetNode.next.prev = targetNode.prev;
+            return removedValue;
+        }
+    }
+    private Node findNode(int index){
+
+        Node nodeFromTail = tail;
+        Node nodeFromHead = head;
+        if (index <= size / 2) {
+            for (int i = 0; i < index; i++) {
+                nodeFromHead = nodeFromHead.next;
+            }
+           return nodeFromHead;
+        }else {
+            for (int i = size; i > index; i--) {
+                nodeFromTail = nodeFromTail.prev;
+            }
+           return nodeFromTail;
+
+        }
+    }
+
     private void removeFirst() {
         head = head.next;
         head.prev = null;
         size--;
     }
 
-    private void removeLast(int value) {
-        Node node = tail;
-        tail = node.prev;
-        node.prev = null;
-        tail.next = null;
+    private void removeLast() {
+        tail=tail.prev;
+        tail.next=null;
         size--;
     }
 
-    public int get(int index) {
-        listISEmpty();
+    public Object get(int index) {
         validateIndex(index);
         Node node = head;
         for (int i = 0; i < index; i++) {
@@ -133,9 +163,9 @@ public class LinkedList extends AbstractList {
 
 
     @Override
-    public int indexOf(int value) {
+    public int indexOf(T value) {
         for (int i = 0; i < size; i++) {
-            if (value == get(i)) {
+            if (value.equals(get(i))) {
                 return i;
             }
         }
