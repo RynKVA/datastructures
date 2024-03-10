@@ -1,6 +1,21 @@
 package org.example.list;
+
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
+        // Rework tests +
+        // Array list - toString +
+        // move to AbstractList common part +
+        // clean code +
+        // Generics -> List<String> or List<Integer> or List<CustomObject> +
+        // <? extends AnyObject>, <? super AnyObject> (AnyObject from hierarchy) +
+        // https://www.youtube.com/watch?v=MniNZsyjH9E&list=PL6jg6AGdCNaX1yIJpX4sgALBTmTVc_uOJ +
+        // suppressed exception - READ
+        // try {} catch +
+        // try with resources +
+
+
 /*        LinkedList list = new LinkedList();
         list.add(5);
         list.add(3);
@@ -19,7 +34,12 @@ public class Main {
         System.out.println(list.contains(0));
         System.out.println(list.indexOf(177));*/
 //        System.out.println(list.get());
-        LinkedList<String >list = new LinkedList<>();
-        System.out.println(list.remove( "5"));
+      /*  LinkedList<Integer> list= new LinkedList<>();
+        list.add(6);
+        list.add(5);
+        list.add(4);
+        list.add(3);
+        list.add(2);
+        System.out.println(list);*/
     }
 }

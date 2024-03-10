@@ -1,12 +1,7 @@
 package org.example.list;
 
 import java.util.StringJoiner;
-
-// move magic numbers to constants +
-// replace by system.arraycopy where it's possible +
-// move toArray method to test +
-// overriding method toString +
-// Generics
+// Generics +
 public class ArrayList <T> extends AbstractList <T> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final double DEFAULT_EXTENSION = 1.5;
@@ -46,13 +41,14 @@ public class ArrayList <T> extends AbstractList <T> {
     @Override
     public Object remove(int index) {
         validateIndex(index);
+        Object removedElement=get(index);
         if (index==size) {
             size--;
-            return array[index];
+            return removedElement;
         }
         System.arraycopy(array, index + 1, array, index, size - (index + 1));
         size--;
-        return array[index];
+        return removedElement;
     }
 
     @Override

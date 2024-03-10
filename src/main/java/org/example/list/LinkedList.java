@@ -4,9 +4,6 @@ import java.util.StringJoiner;
 
 public class LinkedList<T> extends AbstractList<T> {
 
-    // simplify add +
-    // fix remove +
-    // overriding method toString +
 
 
     private class Node {
@@ -109,33 +106,35 @@ public class LinkedList<T> extends AbstractList<T> {
     public Object remove(int index) {
         validateIndex(index);
         Object removedValue = get(index);
-        if (index == 0){
+        if (index == 0) {
             removeFirst();
             return removedValue;
-        } else if (index == size-1) {
+        } else if (index == size - 1) {
             removeLast();
             return removedValue;
-        }else {
+        } else {
             Node targetNode = findNode(index);
             targetNode.prev.next = targetNode.next;
             targetNode.next.prev = targetNode.prev;
+            size--;
             return removedValue;
         }
     }
-    private Node findNode(int index){
 
+    private Node findNode(int index) {
+        validateIndex(index);
         Node nodeFromTail = tail;
         Node nodeFromHead = head;
         if (index <= size / 2) {
             for (int i = 0; i < index; i++) {
                 nodeFromHead = nodeFromHead.next;
             }
-           return nodeFromHead;
-        }else {
-            for (int i = size; i > index; i--) {
+            return nodeFromHead;
+        } else {
+            for (int i = size-1; i > index; i--) {
                 nodeFromTail = nodeFromTail.prev;
             }
-           return nodeFromTail;
+            return nodeFromTail;
 
         }
     }
@@ -147,8 +146,8 @@ public class LinkedList<T> extends AbstractList<T> {
     }
 
     private void removeLast() {
-        tail=tail.prev;
-        tail.next=null;
+        tail = tail.prev;
+        tail.next = null;
         size--;
     }
 

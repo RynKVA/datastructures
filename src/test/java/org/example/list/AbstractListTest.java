@@ -9,24 +9,25 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/*
 public abstract class AbstractListTest {
-    
-    List emptyList;
-    List listWIthFiveElement;
+
+    List<Integer> emptyList;
+    List<Integer> listWIthFiveElement;
 
     private int[] array;
 
     @BeforeEach
     public void before() {
         emptyList = getList();
-        
+
         listWIthFiveElement = getList();
         listWIthFiveElement.add(1);
-        
+
     }
-    
-    public abstract List getList();
-    
+
+    public abstract List<Integer> getList();
+
     @Test
     void whenElementIsAddedInEmptyListItTakesTheFirstPosition() {
         emptyList.add(1);
@@ -76,7 +77,7 @@ public abstract class AbstractListTest {
         emptyList.add(2);
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.add(0, 7));
-        assertEquals(exception.getMessage(),"Index out of emptyList.");
+        assertEquals(exception.getMessage(), "Index out of emptyList.");
     }
 
     @Test
@@ -107,7 +108,7 @@ public abstract class AbstractListTest {
         emptyList.add(3);
         emptyList.add(2);
         array = new int[]{6, 4, 3, 2};
-        assertTrue(emptyList.remove(5));
+        assertTrue(emptyList.remove((Integer) 5));
         assertEquals(Arrays.toString(array), emptyList.toString());
 
     }
@@ -120,7 +121,7 @@ public abstract class AbstractListTest {
         emptyList.add(3);
         emptyList.add(2);
         array = new int[]{5, 4, 3, 2};
-        assertTrue(emptyList.remove(6));
+        assertTrue(emptyList.remove((Integer)6);
         assertEquals(Arrays.toString(array), emptyList.toString());
     }
 
@@ -132,7 +133,7 @@ public abstract class AbstractListTest {
         emptyList.add(3);
         emptyList.add(2);
         array = new int[]{6, 5, 4, 3};
-        assertTrue(emptyList.remove(2));
+        assertTrue(emptyList.remove((Integer) 2));
         assertEquals(Arrays.toString(array), emptyList.toString());
     }
 
@@ -144,7 +145,7 @@ public abstract class AbstractListTest {
         emptyList.add(3);
         emptyList.add(2);
         array = new int[]{6, 5, 4, 3, 2};
-        assertFalse(emptyList.remove(7));
+        assertFalse(emptyList.remove((Integer) 7));
         assertEquals(Arrays.toString(array), emptyList.toString());
 
     }
@@ -153,7 +154,7 @@ public abstract class AbstractListTest {
     void whenElementIsRemovedFromEmptyListExpectIndexOutOFBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.remove(5));
-        assertEquals(exception.getMessage(),"List is empty.");
+        assertEquals(exception.getMessage(), "List is empty.");
     }
 
     @Test
@@ -196,7 +197,7 @@ public abstract class AbstractListTest {
     void getValueFromIndexWhenListIsEmpty() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.get(0));
-        assertEquals(exception.getMessage(),"List is empty.");
+        assertEquals(exception.getMessage(), "List is empty.");
     }
 
     @Test
@@ -208,7 +209,7 @@ public abstract class AbstractListTest {
         emptyList.add(2);
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.get(6));
-        assertEquals(exception.getMessage(),"Index out of emptyList.");
+        assertEquals(exception.getMessage(), "Index out of emptyList.");
     }
 
     @Test
@@ -231,3 +232,4 @@ public abstract class AbstractListTest {
         assertEquals(-1, emptyList.indexOf(7));
     }
 }
+*/

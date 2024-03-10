@@ -1,6 +1,5 @@
 package org.example.list;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,12 +7,12 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class ListTest  {
-    private List  emptyList;
-    private List  listWithSomeElements;
+abstract class ListTest {
+    private List<Integer> emptyList;
+    private List<Integer> listWithSomeElements;
     private int[] array;
 
-    abstract List getList();
+    abstract List<Integer> getList();
 
 
     @BeforeEach
@@ -79,7 +78,7 @@ abstract class ListTest  {
     @Test
     void whenElementIsRemovedNextElementsMovingBackAndReturnTrue() {
         array = new int[]{6, 4, 3, 2};
-        assertTrue(listWithSomeElements.remove(5));
+        assertTrue(listWithSomeElements.remove((Integer) 5));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
 
     }
@@ -87,21 +86,21 @@ abstract class ListTest  {
     @Test
     void removeElementFromTheFirstPosition() {
         array = new int[]{5, 4, 3, 2};
-        assertTrue(listWithSomeElements.remove(6));
+        assertTrue(listWithSomeElements.remove((Integer) 6));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
     }
 
     @Test
     void removeElementFromTheLastPosition() {
         array = new int[]{6, 5, 4, 3};
-        assertTrue(listWithSomeElements.remove(2));
+        assertTrue(listWithSomeElements.remove((Integer) 2));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
     }
 
     @Test
     void whenRemoveElementWitchNoteContainedReturnFalse() {
         array = new int[]{6, 5, 4, 3, 2};
-        assertFalse(listWithSomeElements.remove(7));
+        assertFalse(listWithSomeElements.remove((Integer) 7));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
 
     }
@@ -110,7 +109,42 @@ abstract class ListTest  {
     void whenElementIsRemovedFromEmptyListExpectIndexOutOFBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.remove(5));
-        assertEquals(exception.getMessage(), "List is empty.");
+        assertEquals(exception.getMessage(), "Index out of List.");
+    }
+
+    @Test
+    void whenRemovedByFirstIndexRemoveFirstElementInListAndReturnElement() {
+        array = new int[]{5, 4, 3, 2};
+        assertEquals(6, listWithSomeElements.remove(0));
+        assertEquals(Arrays.toString(array), listWithSomeElements.toString());
+    }
+
+    @Test
+    void whenRemovedByLastIndexRemovingLastElementAndReturnElement() {
+        array = new int[]{6, 5, 4, 3};
+        assertEquals(2, listWithSomeElements.remove(4));
+        assertEquals(Arrays.toString(array), listWithSomeElements.toString());
+    }
+
+    @Test
+    void whenRemovedByIndexThreeRemovingElementOnPositionThreeAndReturnElement() {
+        array = new int[]{6, 5, 4, 2};
+        assertEquals(3, listWithSomeElements.remove(3));
+        assertEquals(Arrays.toString(array), listWithSomeElements.toString());
+    }
+
+    @Test
+    void whenRemovedByIndexInEmptyListExpectIndexOutOfBoundsException() {
+        IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
+                () -> emptyList.remove(0));
+        assertEquals(exception.getMessage(),"Index out of List.");
+    }
+
+    @Test
+    void whenRemovedByIndexWhichOutOfListExpectIndexOutOfBoundsException() {
+        IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
+                () -> listWithSomeElements.remove(5));
+        assertEquals(exception.getMessage(),"Index out of List.");
     }
 
     @Test
@@ -138,7 +172,7 @@ abstract class ListTest  {
     void getValueFromIndexWhenListIsEmpty() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.get(0));
-        assertEquals(exception.getMessage(), "List is empty.");
+        assertEquals(exception.getMessage(), "Index out of List.");
     }
 
     @Test
