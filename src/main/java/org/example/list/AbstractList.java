@@ -1,8 +1,7 @@
 package org.example.list;
 
-public abstract class AbstractList <T> implements List <T> {
+public abstract class AbstractList<T> implements List<T> {
     protected int size;
-
 
 
     @Override
@@ -18,6 +17,16 @@ public abstract class AbstractList <T> implements List <T> {
     @Override
     public int size() {
         return size;
+    }
+
+    @Override
+    public int indexOf(T value) {
+        for (int i = 0; i < size; i++) {
+            if (value.equals(get(i))) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override

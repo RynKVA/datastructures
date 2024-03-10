@@ -137,14 +137,14 @@ abstract class ListTest {
     void whenRemovedByIndexInEmptyListExpectIndexOutOfBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.remove(0));
-        assertEquals(exception.getMessage(),"Index out of List.");
+        assertEquals(exception.getMessage(), "Index out of List.");
     }
 
     @Test
     void whenRemovedByIndexWhichOutOfListExpectIndexOutOfBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> listWithSomeElements.remove(5));
-        assertEquals(exception.getMessage(),"Index out of List.");
+        assertEquals(exception.getMessage(), "Index out of List.");
     }
 
     @Test

@@ -10,5 +10,7 @@ public interface Stack<E> {
 
     E push(E item);
 
-    int search(Object o);
+    int search(Object item);
+
+    String toString();
 }

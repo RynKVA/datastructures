@@ -1,7 +1,5 @@
 package org.example.list;
 
-import java.util.ArrayList;
-
 public class Main {
     public static void main(String[] args) {
 
@@ -37,12 +35,13 @@ public class Main {
         System.out.println(list.contains(0));
         System.out.println(list.indexOf(177));*/
 //        System.out.println(list.get());
-      /*  LinkedList<Integer> list= new LinkedList<>();
+        ArrayList<Integer> list= new ArrayList<>();
         list.add(6);
         list.add(5);
         list.add(4);
         list.add(3);
         list.add(2);
-        System.out.println(list);*/
+        System.out.println(list);
+        System.out.println(list.indexOf(3));
     }
 }

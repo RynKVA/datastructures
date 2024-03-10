@@ -129,7 +129,7 @@ public class LinkedList<T> extends AbstractList<T> {
             }
             return nodeFromHead;
         } else {
-            for (int i = size-1; i > index; i--) {
+            for (int i = size - 1; i > index; i--) {
                 nodeFromTail = nodeFromTail.prev;
             }
             return nodeFromTail;
@@ -149,6 +149,7 @@ public class LinkedList<T> extends AbstractList<T> {
         size--;
     }
 
+    @Override
     public T get(int index) {
         validateIndex(index);
         Node node = head;
@@ -156,17 +157,6 @@ public class LinkedList<T> extends AbstractList<T> {
             node = node.next;
         }
         return node.data;
-    }
-
-
-    @Override
-    public int indexOf(T value) {
-        for (int i = 0; i < size; i++) {
-            if (value.equals(get(i))) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     @Override

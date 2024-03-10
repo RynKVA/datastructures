@@ -7,11 +7,13 @@ public class ArrayList <T> extends AbstractList <T> {
     private static final double DEFAULT_EXTENSION = 1.5;
     private T[] array;
 
-    @SuppressWarnings("unchecked")public ArrayList() {
+    @SuppressWarnings("unchecked")
+    public ArrayList() {
         array = (T[]) new Object[DEFAULT_CAPACITY];
     }
 
-    @SuppressWarnings("unchecked")public ArrayList(int capacity) {
+    @SuppressWarnings("unchecked")
+    public ArrayList(int capacity) {
         array = (T[]) new Object[capacity];
     }
 
@@ -56,17 +58,6 @@ public class ArrayList <T> extends AbstractList <T> {
         return array[index];
     }
 
-    @Override
-    public int indexOf(T value) {
-        for (int i = 0; i < size; i++) {
-            if (array[i].equals(value)) {
-                // npe
-                //array[i] == null;
-                return i;
-            }
-        }
-        return -1;
-    }
 
     @SuppressWarnings("unchecked")
     private void expandingArray() {
@@ -78,7 +69,8 @@ public class ArrayList <T> extends AbstractList <T> {
     }
 
 
-    @SuppressWarnings("unchecked")public void trimToSize() {
+    @SuppressWarnings("unchecked")
+    public void trimToSize() {
         T[] targetArray = (T[]) new Object[size];
         System.arraycopy(array, 0, targetArray, 0, size);
         array = targetArray;
