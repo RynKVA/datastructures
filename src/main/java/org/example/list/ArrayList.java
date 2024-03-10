@@ -5,15 +5,14 @@ import java.util.StringJoiner;
 public class ArrayList <T> extends AbstractList <T> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final double DEFAULT_EXTENSION = 1.5;
-    private Object[] array;
+    private T[] array;
 
-
-    public ArrayList() {
-        array = new Object[DEFAULT_CAPACITY];
+    @SuppressWarnings("unchecked")public ArrayList() {
+        array = (T[]) new Object[DEFAULT_CAPACITY];
     }
 
-    public ArrayList(int capacity) {
-        array = new Object[capacity];
+    @SuppressWarnings("unchecked")public ArrayList(int capacity) {
+        array = (T[]) new Object[capacity];
     }
 
     @Override
@@ -39,9 +38,9 @@ public class ArrayList <T> extends AbstractList <T> {
         return false;
     }
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         validateIndex(index);
-        Object removedElement=get(index);
+        T removedElement=get(index);
         if (index==size) {
             size--;
             return removedElement;
@@ -52,7 +51,7 @@ public class ArrayList <T> extends AbstractList <T> {
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         validateIndex(index);
         return array[index];
     }
@@ -61,22 +60,26 @@ public class ArrayList <T> extends AbstractList <T> {
     public int indexOf(T value) {
         for (int i = 0; i < size; i++) {
             if (array[i].equals(value)) {
+                // npe
+                //array[i] == null;
                 return i;
             }
         }
         return -1;
     }
 
+    @SuppressWarnings("unchecked")
     private void expandingArray() {
         if (size == array.length) {
-            Object[] targetArray =  new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
+            T[] targetArray =  (T[]) new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
             System.arraycopy(array, 0, targetArray, 0, array.length);
             array = targetArray;
         }
     }
 
-    public void trimToSize() {
-        Object[] targetArray = new Object[size];
+
+    @SuppressWarnings("unchecked")public void trimToSize() {
+        T[] targetArray = (T[]) new Object[size];
         System.arraycopy(array, 0, targetArray, 0, size);
         array = targetArray;
     }

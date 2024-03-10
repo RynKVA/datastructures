@@ -3,6 +3,8 @@ package org.example.list;
 public abstract class AbstractList <T> implements List <T> {
     protected int size;
 
+
+
     @Override
     public void add(T value) {
         add(value, size);

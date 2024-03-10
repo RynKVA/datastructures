@@ -4,16 +4,19 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        // Rework tests +
-        // Array list - toString +
-        // move to AbstractList common part +
-        // clean code +
+
         // Generics -> List<String> or List<Integer> or List<CustomObject> +
         // <? extends AnyObject>, <? super AnyObject> (AnyObject from hierarchy) +
         // https://www.youtube.com/watch?v=MniNZsyjH9E&list=PL6jg6AGdCNaX1yIJpX4sgALBTmTVc_uOJ +
+        // move to AbstractList common part (indexOf() shift on this class)
         // suppressed exception - READ
-        // try {} catch +
-        // try with resources +
+        // create new implementation stack
+        // read about lombok
+        // read about <scope>provided</scope>, <scope>test</scope>
+        // <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        // https://leetcode.com/problems/valid-parentheses/description/
+        // ()[{}] - true
+        // ([}) - false
 
 
 /*        LinkedList list = new LinkedList();

@@ -1,7 +1,7 @@
 package org.example.list;
 public interface List <T> {
 
-    Object get(int index);
+    T get(int index);
 
     int indexOf(T value);
 
@@ -13,7 +13,7 @@ public interface List <T> {
 
     boolean remove(T value);
 
-    Object remove(int index);
+    T remove(int index);
 
     int size();
 
@@ -21,18 +21,5 @@ public interface List <T> {
 
     String toString();
 
-    // git init
-    // git add
-    // git commit
-    // git push
-    // git pull
-    // git status
-    // git checkout
-    // git branch
-
-    // git log
-
-
-    // link your github acc with idea
 
 }

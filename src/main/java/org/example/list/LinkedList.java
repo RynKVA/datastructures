@@ -4,8 +4,6 @@ import java.util.StringJoiner;
 
 public class LinkedList<T> extends AbstractList<T> {
 
-
-
     private class Node {
         T data;
         Node next;
@@ -103,9 +101,9 @@ public class LinkedList<T> extends AbstractList<T> {
 
 
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         validateIndex(index);
-        Object removedValue = get(index);
+        T removedValue = get(index);
         if (index == 0) {
             removeFirst();
             return removedValue;
@@ -151,7 +149,7 @@ public class LinkedList<T> extends AbstractList<T> {
         size--;
     }
 
-    public Object get(int index) {
+    public T get(int index) {
         validateIndex(index);
         Node node = head;
         for (int i = 0; i < index; i++) {

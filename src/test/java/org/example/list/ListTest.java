@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 abstract class ListTest {
     private List<Integer> emptyList;
     private List<Integer> listWithSomeElements;
-    private int[] array;
+    private Integer[] array;
 
     abstract List<Integer> getList();
 
@@ -31,7 +31,7 @@ abstract class ListTest {
     @Test
     void whenElementIsAddedInEmptyListItTakesTheFirstPosition() {
         emptyList.add(1);
-        int[] array = new int[]{1};
+        Integer[] array = new Integer[]{1};
         assertEquals(Arrays.toString(array), emptyList.toString());
     }
 
@@ -40,21 +40,21 @@ abstract class ListTest {
         emptyList.add(1);
         emptyList.add(2);
         emptyList.add(3);
-        int[] array = {1, 2, 3};
+        Integer[] array = {1, 2, 3};
         assertEquals(Arrays.toString(array), emptyList.toString());
     }
 
     @Test
     void elementIsAddedAtIndexZeroInNotEmptyList() {
         listWithSomeElements.add(3, 0);
-        array = new int[]{3, 6, 5, 4, 3, 2};
+        array = new Integer[]{3, 6, 5, 4, 3, 2};
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
     }
 
     @Test
     void elementIsAddedAtIndexThree() {
         listWithSomeElements.add(5, 3);
-        array = new int[]{6, 5, 4, 5, 3, 2};
+        array = new Integer[]{6, 5, 4, 5, 3, 2};
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
     }
 
@@ -77,29 +77,29 @@ abstract class ListTest {
 
     @Test
     void whenElementIsRemovedNextElementsMovingBackAndReturnTrue() {
-        array = new int[]{6, 4, 3, 2};
-        assertTrue(listWithSomeElements.remove((Integer) 5));
+        array = new Integer[]{6, 4, 3, 2};
+        assertTrue(listWithSomeElements.remove(Integer.valueOf(5)));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
 
     }
 
     @Test
     void removeElementFromTheFirstPosition() {
-        array = new int[]{5, 4, 3, 2};
+        array = new Integer[]{5, 4, 3, 2};
         assertTrue(listWithSomeElements.remove((Integer) 6));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
     }
 
     @Test
     void removeElementFromTheLastPosition() {
-        array = new int[]{6, 5, 4, 3};
+        array = new Integer[]{6, 5, 4, 3};
         assertTrue(listWithSomeElements.remove((Integer) 2));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
     }
 
     @Test
     void whenRemoveElementWitchNoteContainedReturnFalse() {
-        array = new int[]{6, 5, 4, 3, 2};
+        array = new Integer[]{6, 5, 4, 3, 2};
         assertFalse(listWithSomeElements.remove((Integer) 7));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
 
@@ -114,21 +114,21 @@ abstract class ListTest {
 
     @Test
     void whenRemovedByFirstIndexRemoveFirstElementInListAndReturnElement() {
-        array = new int[]{5, 4, 3, 2};
+        array = new Integer[]{5, 4, 3, 2};
         assertEquals(6, listWithSomeElements.remove(0));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
     }
 
     @Test
     void whenRemovedByLastIndexRemovingLastElementAndReturnElement() {
-        array = new int[]{6, 5, 4, 3};
+        array = new Integer[]{6, 5, 4, 3};
         assertEquals(2, listWithSomeElements.remove(4));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
     }
 
     @Test
     void whenRemovedByIndexThreeRemovingElementOnPositionThreeAndReturnElement() {
-        array = new int[]{6, 5, 4, 2};
+        array = new Integer[]{6, 5, 4, 2};
         assertEquals(3, listWithSomeElements.remove(3));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
     }
