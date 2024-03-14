@@ -1,5 +1,6 @@
 package org.example.stack;
 
+
 import java.util.StringJoiner;
 
 public class StackClass<E> implements Stack<E> {
