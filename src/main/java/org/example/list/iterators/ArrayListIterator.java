@@ -1,6 +1,4 @@
 package org.example.list.iterators;
-
-import org.example.list.AbstractList;
 import org.example.list.ArrayList;
 
 import java.util.Iterator;

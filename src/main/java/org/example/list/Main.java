@@ -1,7 +1,5 @@
 package org.example.list;
 
-import org.example.list.iterators.ArrayListIterator;
-import org.example.queue.QueueClass;
 
 import java.util.*;
 
