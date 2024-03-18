@@ -6,11 +6,11 @@ public class QueueClass<E> implements Queue<E> {
     private int size;
     private final int capacity;
 
-    QueueClass() {
-        capacity = 11;
+    public QueueClass() {
+        capacity = 10;
     }
 
-    QueueClass(int capacity) {
+    public QueueClass(int capacity) {
         this.capacity = capacity;
     }
 

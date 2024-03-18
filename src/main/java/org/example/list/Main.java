@@ -1,5 +1,8 @@
 package org.example.list;
 
+import org.example.list.iterators.ArrayListIterator;
+import org.example.queue.QueueClass;
+
 import java.util.*;
 
 public class Main {
@@ -36,14 +39,21 @@ public class Main {
         System.out.println(list.contains(0));
         System.out.println(list.indexOf(177));*/
 //        System.out.println(list.get());
-        /*ArrayList<Integer> list= new ArrayList<>();
+        ArrayList<Integer> list= new ArrayList<>();
         list.add(6);
         list.add(5);
         list.add(4);
         list.add(3);
         list.add(2);
+        Iterator<Integer>iterator= list.iterator();
+        System.out.println(iterator.next());
+        System.out.println();
+        iterator.remove();
+        iterator.next();
+        iterator.remove();
+
         System.out.println(list);
-        System.out.println(list.indexOf(3));*/
+
 
     }
 }

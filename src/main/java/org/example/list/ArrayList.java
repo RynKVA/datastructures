@@ -1,24 +1,27 @@
 package org.example.list;
 
+import org.example.list.iterators.ArrayListIterator;
+
+import java.util.Iterator;
 import java.util.StringJoiner;
 // Generics +
-public class ArrayList <T> extends AbstractList <T> {
+public class ArrayList <E> extends AbstractList<E> implements Iterable<E> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final double DEFAULT_EXTENSION = 1.5;
-    private T[] array;
+    private E[] array;
 
     @SuppressWarnings("unchecked")
     public ArrayList() {
-        array = (T[]) new Object[DEFAULT_CAPACITY];
+        array = (E[]) new Object[DEFAULT_CAPACITY];
     }
 
     @SuppressWarnings("unchecked")
     public ArrayList(int capacity) {
-        array = (T[]) new Object[capacity];
+        array = (E[]) new Object[capacity];
     }
 
     @Override
-    public void add(T value, int index) {
+    public void add(E value, int index) {
         validateIndexOnAdd(index);
         expandingArray();
         if (size != 0) {
@@ -29,7 +32,7 @@ public class ArrayList <T> extends AbstractList <T> {
     }
 
     @Override
-    public boolean remove(T value) {
+    public boolean remove(E value) {
         for (int i = 0; i < size; i++) {
             if (array[i].equals(value)) {
                 System.arraycopy(array, indexOf(value) + 1, array, indexOf(value), size - (indexOf(value) + 1));
@@ -40,9 +43,9 @@ public class ArrayList <T> extends AbstractList <T> {
         return false;
     }
     @Override
-    public T remove(int index) {
+    public E remove(int index) {
         validateIndex(index);
-        T removedElement=get(index);
+        E removedElement=get(index);
         if (index==size) {
             size--;
             return removedElement;
@@ -53,7 +56,7 @@ public class ArrayList <T> extends AbstractList <T> {
     }
 
     @Override
-    public T get(int index) {
+    public E get(int index) {
         validateIndex(index);
         return array[index];
     }
@@ -62,7 +65,7 @@ public class ArrayList <T> extends AbstractList <T> {
     @SuppressWarnings("unchecked")
     private void expandingArray() {
         if (size == array.length) {
-            T[] targetArray =  (T[]) new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
+            E[] targetArray =  (E[]) new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
             System.arraycopy(array, 0, targetArray, 0, array.length);
             array = targetArray;
         }
@@ -71,7 +74,7 @@ public class ArrayList <T> extends AbstractList <T> {
 
     @SuppressWarnings("unchecked")
     public void trimToSize() {
-        T[] targetArray = (T[]) new Object[size];
+        E[] targetArray = (E[]) new Object[size];
         System.arraycopy(array, 0, targetArray, 0, size);
         array = targetArray;
     }
@@ -83,5 +86,10 @@ public class ArrayList <T> extends AbstractList <T> {
             joiner.add(String.valueOf(array[i]));
         }
         return joiner.toString();
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return new ArrayListIterator<>(this);
     }
 }

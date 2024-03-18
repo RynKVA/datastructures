@@ -1,16 +1,16 @@
 package org.example.list;
 
-public abstract class AbstractList<T> implements List<T> {
+public abstract class AbstractList<E> implements List<E> {
     protected int size;
 
 
     @Override
-    public void add(T value) {
+    public void add(E value) {
         add(value, size);
     }
 
     @Override
-    public boolean contains(T value) {
+    public boolean contains(E value) {
         return indexOf(value) != -1;
     }
 
@@ -20,7 +20,7 @@ public abstract class AbstractList<T> implements List<T> {
     }
 
     @Override
-    public int indexOf(T value) {
+    public int indexOf(E value) {
         for (int i = 0; i < size; i++) {
             if (value.equals(get(i))) {
                 return i;
