@@ -109,9 +109,10 @@ public class QueueClass<E> implements Queue<E> {
     @Override
     public String toString(){
         StringJoiner joiner= new StringJoiner(", ","[","]");
+        Node<E> node= head;
         for (int i = 0; i < size; i++) {
-            joiner.add(String.valueOf(head.element));
-            head=head.next;
+            joiner.add(String.valueOf(node.element));
+            node=node.next;
         }
         return joiner.toString();
     }
