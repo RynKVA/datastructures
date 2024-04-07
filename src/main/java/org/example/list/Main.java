@@ -1,10 +1,7 @@
 package org.example.list;
 
 
-import search.QuickSearch;
-import org.apache.*;
-
-import java.util.*;
+import org.example.search.QuickSearch;
 
 public class Main {
     public static void main(String[] args) {

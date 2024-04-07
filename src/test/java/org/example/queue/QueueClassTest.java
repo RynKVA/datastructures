@@ -1,5 +1,6 @@
 package org.example.queue;
 
+import org.example.list.queue.QueueClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

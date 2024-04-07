@@ -1,4 +1,4 @@
-package org.example.stack;
+package org.example.list.stack;
 
 public interface Stack<E> {
 
@@ -11,6 +11,7 @@ public interface Stack<E> {
     E push(E item);
 
     int search(Object item);
+    void clear();
 
     String toString();
 }

@@ -2,8 +2,11 @@ package org.example.list;
 public interface List <T> {
 
     T get(int index);
+    T set(T value, int index);
 
     int indexOf(T value);
+    int lastIndexOf(T value);
+    void clear ();
 
     void add(T value);
 

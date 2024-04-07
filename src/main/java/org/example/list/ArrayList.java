@@ -43,6 +43,13 @@ public class ArrayList <E> extends AbstractList<E> implements Iterable<E> {
         return false;
     }
     @Override
+    public void clear(){
+        for (int i = 0; i < size; i++) {
+            array[i] = null;
+        }
+        size = 0;
+    }
+    @Override
     public E remove(int index) {
         validateIndex(index);
         E removedElement=get(index);
@@ -59,6 +66,14 @@ public class ArrayList <E> extends AbstractList<E> implements Iterable<E> {
     public E get(int index) {
         validateIndex(index);
         return array[index];
+    }
+
+    @Override
+    public E set(E value, int index) {
+        validateIndex(index);
+        E previousValue = array[index];
+        array[index] = value;
+        return previousValue;
     }
 
 

@@ -1,4 +1,4 @@
-package org.example.queue;
+package org.example.list.queue;
 
 public interface Queue<E> {
     public boolean add(E elem);

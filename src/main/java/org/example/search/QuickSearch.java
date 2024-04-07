@@ -1,4 +1,4 @@
-package search;
+package org.example.search;
 
 public class QuickSearch {
     public static int quickSearch(int[] array, int targetElement) {

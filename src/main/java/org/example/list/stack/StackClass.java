@@ -1,4 +1,4 @@
-package org.example.stack;
+package org.example.list.stack;
 
 
 import java.util.StringJoiner;
@@ -10,7 +10,7 @@ public class StackClass<E> implements Stack<E> {
     private static final double DEFAULT_EXTENSION = 1.5;
 
     @SuppressWarnings("unchecked")
-    StackClass() {
+    public StackClass() {
         array = (E[]) new Object[DEFAULT_CAPACITY];
     }
 
@@ -35,11 +35,6 @@ public class StackClass<E> implements Stack<E> {
     @Override
     public E push(E item) {
         expandingArray();
-        if (size == 0) {
-            array[0] = item;
-            size++;
-            return item;
-        }
         array[size] = item;
         size++;
         return item;
@@ -49,11 +44,19 @@ public class StackClass<E> implements Stack<E> {
     @Override
     public int search(Object item) {
         for (int i = 0; i < size; i++) {
-            if (item.equals(array[i])){
+            if (item.equals(array[i])) {
                 return i;
             }
         }
         return -1;
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < array.length; i++) {
+            array[i] = null;
+        }
+        size = 0;
     }
 
     public int size() {

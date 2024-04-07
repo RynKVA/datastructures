@@ -1,4 +1,4 @@
-package org.example;
+package org.example.sort;
 
 public class Sort {
     static int swaps = 0;

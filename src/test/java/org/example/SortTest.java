@@ -1,9 +1,8 @@
 package org.example;
 
-import java.util.Arrays;
+import org.example.sort.Sort;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.example.Sort.sort;
 
 class SortTest {
 

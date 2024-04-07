@@ -28,6 +28,15 @@ public abstract class AbstractList<E> implements List<E> {
         }
         return -1;
     }
+    @Override
+    public int lastIndexOf(E value) {
+        for (int i = size - 1; i >= 0; i--) {
+            if (value.equals(get(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     @Override
     public boolean isEmpty() {

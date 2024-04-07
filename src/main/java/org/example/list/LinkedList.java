@@ -2,14 +2,14 @@ package org.example.list;
 
 import java.util.StringJoiner;
 
-public class LinkedList<T> extends AbstractList<T> {
+public class LinkedList<E> extends AbstractList<E> {
 
     private class Node {
-        T data;
+        E data;
         Node next;
         Node prev;
 
-        public Node(T data) {
+        public Node(E data) {
             this.data = data;
         }
 
@@ -20,7 +20,7 @@ public class LinkedList<T> extends AbstractList<T> {
 
 
     @Override
-    public void add(T value, int index) {
+    public void add(E value, int index) {
         validateIndexOnAdd(index);
         if (size == 0) {
             addInEmptyList(value);
@@ -33,13 +33,13 @@ public class LinkedList<T> extends AbstractList<T> {
         }
     }
 
-    private void addInEmptyList(T value) {
+    private void addInEmptyList(E value) {
         Node targetNode = new Node(value);
         head = tail = targetNode;
         size++;
     }
 
-    public void addFirst(T value) {
+    public void addFirst(E value) {
         Node firstNode = new Node(value);
         head.prev = firstNode;
         firstNode.next = head;
@@ -47,7 +47,7 @@ public class LinkedList<T> extends AbstractList<T> {
         size++;
     }
 
-    public void addLast(T value) {
+    public void addLast(E value) {
         Node lastNode = new Node(value);
         tail.next = lastNode;
         lastNode.prev = tail;
@@ -55,7 +55,7 @@ public class LinkedList<T> extends AbstractList<T> {
         size++;
     }
 
-    private void addFromHeadOrTail(T value, int index) {
+    private void addFromHeadOrTail(E value, int index) {
         Node targetNode = new Node(value);
         Node nodePrev = tail;
         Node nodeNext = head;
@@ -78,7 +78,7 @@ public class LinkedList<T> extends AbstractList<T> {
     }
 
     @Override
-    public boolean remove(T value) {
+    public boolean remove(E value) {
         if (indexOf(value) == 0) {
             removeFirst();
             return true;
@@ -101,9 +101,9 @@ public class LinkedList<T> extends AbstractList<T> {
 
 
     @Override
-    public T remove(int index) {
+    public E remove(int index) {
         validateIndex(index);
-        T removedValue = get(index);
+        E removedValue = get(index);
         if (index == 0) {
             removeFirst();
             return removedValue;
@@ -148,15 +148,39 @@ public class LinkedList<T> extends AbstractList<T> {
         tail.next = null;
         size--;
     }
+    @Override
+    public void clear(){
+        for (Node node = head; node != null;) {
+            Node next = node.next;
+            node.data = null;
+            node.prev = null;
+            node.next = null;
+            node = next;
+        }
+        size = 0;
+        head = tail = null;
+    }
 
     @Override
-    public T get(int index) {
+    public E get(int index) {
         validateIndex(index);
         Node node = head;
         for (int i = 0; i < index; i++) {
             node = node.next;
         }
         return node.data;
+    }
+
+    @Override
+    public E set(E value, int index) {
+        validateIndex(index);
+        Node node = head;
+        for (int i = 0; i < index; i++) {
+            node = node.next;
+        }
+        E previousValue = node.data;
+        node.data = value;
+        return previousValue;
     }
 
     @Override

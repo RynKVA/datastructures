@@ -1,4 +1,4 @@
-package org.example.queue;
+package org.example.list.queue;
 
 import java.util.StringJoiner;
 

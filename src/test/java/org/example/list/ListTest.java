@@ -1,6 +1,7 @@
 package org.example.list;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -190,5 +191,42 @@ abstract class ListTest {
     @Test
     void returnIndexOfValueWhenIsNotContained() {
         assertEquals(-1, listWithSomeElements.indexOf(7));
+    }
+
+    @Test
+    void testLastIndexOfReturnElement(){
+        assertEquals(2, listWithSomeElements.lastIndexOf(4));
+    }
+
+    @Test
+    void testLastIndexOfWhenElementIsNotContained(){
+        assertEquals(-1, listWithSomeElements.indexOf(7));
+    }
+
+    @Test
+    void testSetMethodOnEmptyListExpectIndexOutOfBoundsException(){
+        IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
+                () -> emptyList.set(6, 0));
+        assertEquals(exception.getMessage(), "Index out of List.");
+    }
+
+    @Test
+    void testSetMethodReturnSwapElement(){
+        int[] array = {6, 5, 10, 3, 2};
+
+        assertEquals(4, listWithSomeElements.set(10, 2));
+        assertEquals(Arrays.toString(array), listWithSomeElements.toString());
+    }
+    @Test
+    void testSetMethodWithIndexOutOfBoundsExpectIndexOutOfBoundsException(){
+        IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
+                () -> listWithSomeElements.set(6, 10));
+        assertEquals(exception.getMessage(), "Index out of List.");
+    }
+
+    @Test
+    void whenUseCLearMethodThanSizeStandZero(){
+        listWithSomeElements.clear();
+        assertEquals(0, listWithSomeElements.size());
     }
 }
