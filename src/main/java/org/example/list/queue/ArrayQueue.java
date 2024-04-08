@@ -1,5 +1,6 @@
 package org.example.list.queue;
 
+import java.util.Objects;
 import java.util.StringJoiner;
 
 public class ArrayQueue implements NewQueue {
@@ -48,7 +49,7 @@ public class ArrayQueue implements NewQueue {
     @Override
     public boolean contains(Object value) {
         for (int i = 0; i < size; i++) {
-            if(value.equals(array[i])){
+            if(Objects.equals(array[i], value)){
                 return true;
             }
         }

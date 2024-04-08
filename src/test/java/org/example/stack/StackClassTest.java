@@ -9,7 +9,7 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class StackClassTest {
+public class StackClassTest {
     private StackClass<Integer> emptyStack;
     private StackClass<Integer> stack;
     private Integer[] array;
@@ -29,7 +29,8 @@ class StackClassTest {
     }
 
     @Test
-    void whenCallMethodIsEmptyThanReturnTrue() {
+    void whenCallMethodIsEmptyOnEmptyStackThanReturnTrue() {
+        StackClass<Integer> emptyStack = new StackClass<>();
         assertTrue(emptyStack.isEmpty());
     }
 

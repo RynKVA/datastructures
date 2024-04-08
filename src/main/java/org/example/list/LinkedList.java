@@ -89,7 +89,8 @@ public class LinkedList<E> extends AbstractList<E> {
         Node node = head;
         for (int i = 0; i < size - 1; i++) {
             node = node.next;
-            if (node.data == value) {
+            if (value.equals(node.data)) {
+                node.data = null;
                 node.prev.next = node.next;
                 node.next.prev = node.prev;
                 size--;
@@ -112,6 +113,7 @@ public class LinkedList<E> extends AbstractList<E> {
             return removedValue;
         } else {
             Node targetNode = findNode(index);
+            targetNode.data = null;
             targetNode.prev.next = targetNode.next;
             targetNode.next.prev = targetNode.prev;
             size--;
@@ -139,18 +141,21 @@ public class LinkedList<E> extends AbstractList<E> {
 
     private void removeFirst() {
         head = head.next;
+        head.prev.data = null;
         head.prev = null;
         size--;
     }
 
     private void removeLast() {
         tail = tail.prev;
+        tail.next.data = null;
         tail.next = null;
         size--;
     }
+
     @Override
-    public void clear(){
-        for (Node node = head; node != null;) {
+    public void clear() {
+        for (Node node = head; node != null; ) {
             Node next = node.next;
             node.data = null;
             node.prev = null;

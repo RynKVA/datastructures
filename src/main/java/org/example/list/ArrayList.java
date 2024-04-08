@@ -4,8 +4,9 @@ import org.example.list.iterators.ArrayListIterator;
 
 import java.util.Iterator;
 import java.util.StringJoiner;
+
 // Generics +
-public class ArrayList <E> extends AbstractList<E> implements Iterable<E> {
+public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final double DEFAULT_EXTENSION = 1.5;
     private E[] array;
@@ -36,28 +37,33 @@ public class ArrayList <E> extends AbstractList<E> implements Iterable<E> {
         for (int i = 0; i < size; i++) {
             if (array[i].equals(value)) {
                 System.arraycopy(array, indexOf(value) + 1, array, indexOf(value), size - (indexOf(value) + 1));
+                array[size - 1] = null;
                 size--;
                 return true;
             }
         }
         return false;
     }
+
     @Override
-    public void clear(){
+    public void clear() {
         for (int i = 0; i < size; i++) {
             array[i] = null;
         }
         size = 0;
     }
+
     @Override
     public E remove(int index) {
         validateIndex(index);
-        E removedElement=get(index);
-        if (index==size) {
+        E removedElement = get(index);
+        if (index == size - 1) {
+            array[size - 1] = null;
             size--;
             return removedElement;
         }
         System.arraycopy(array, index + 1, array, index, size - (index + 1));
+        array[size - 1] = null;
         size--;
         return removedElement;
     }
@@ -80,7 +86,7 @@ public class ArrayList <E> extends AbstractList<E> implements Iterable<E> {
     @SuppressWarnings("unchecked")
     private void expandingArray() {
         if (size == array.length) {
-            E[] targetArray =  (E[]) new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
+            E[] targetArray = (E[]) new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
             System.arraycopy(array, 0, targetArray, 0, array.length);
             array = targetArray;
         }

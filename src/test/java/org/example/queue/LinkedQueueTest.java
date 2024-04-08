@@ -1,6 +1,6 @@
 package org.example.queue;
 
-import org.example.list.queue.QueueClass;
+import org.example.list.queue.LinkedQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,14 +8,14 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class QueueClassTest {
-    private QueueClass<Integer> emptyQueue;
-    private QueueClass<Integer> queueWithCapacityThree;
+class LinkedQueueTest {
+    private LinkedQueue<Integer> emptyQueue;
+    private LinkedQueue<Integer> queueWithCapacityThree;
 
     @BeforeEach
     void before() {
-        emptyQueue=new QueueClass<>();
-        queueWithCapacityThree= new QueueClass<>(3);
+        emptyQueue=new LinkedQueue<>();
+        queueWithCapacityThree= new LinkedQueue<>(3);
 
         queueWithCapacityThree.add(3);
         queueWithCapacityThree.add(5);

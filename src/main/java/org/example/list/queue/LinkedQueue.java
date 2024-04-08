@@ -2,15 +2,15 @@ package org.example.list.queue;
 
 import java.util.StringJoiner;
 
-public class QueueClass<E> implements Queue<E> {
+public class LinkedQueue<E> implements Queue<E> {
     private int size;
     private final int capacity;
 
-    public QueueClass() {
+    public LinkedQueue() {
         capacity = 10;
     }
 
-    public QueueClass(int capacity) {
+    public LinkedQueue(int capacity) {
         this.capacity = capacity;
     }
 
@@ -81,6 +81,7 @@ public class QueueClass<E> implements Queue<E> {
         return null;
         }
         E pollElem= head.element;
+        head.element = null;
         head=head.next;
         size--;
         return pollElem;
@@ -89,10 +90,11 @@ public class QueueClass<E> implements Queue<E> {
     @Override
     public E remove() {
         emptyQueue();
-        E pollElem= head.element;
+        E removeElem = head.element;
+        head.element = null;
         head=head.next;
         size--;
-        return pollElem;
+        return removeElem;
     }
 
     private void validateMaxSize() {
