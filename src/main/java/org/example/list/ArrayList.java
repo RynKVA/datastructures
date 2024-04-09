@@ -13,7 +13,7 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
 
     @SuppressWarnings("unchecked")
     public ArrayList() {
-        array = (E[]) new Object[DEFAULT_CAPACITY];
+        this(DEFAULT_CAPACITY);
     }
 
     @SuppressWarnings("unchecked")
@@ -24,7 +24,7 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
     @Override
     public void add(E value, int index) {
         validateIndexOnAdd(index);
-        expandingArray();
+        expandingCapacity();
         if (size != 0) {
             System.arraycopy(array, index, array, index + 1, size - index);
         }
@@ -84,7 +84,7 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
 
 
     @SuppressWarnings("unchecked")
-    private void expandingArray() {
+    private void expandingCapacity() {
         if (size == array.length) {
             E[] targetArray = (E[]) new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
             System.arraycopy(array, 0, targetArray, 0, array.length);

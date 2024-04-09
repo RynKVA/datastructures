@@ -29,7 +29,7 @@ public class LinkedList<E> extends AbstractList<E> {
         } else if (index == size) {
             addLast(value);
         } else {
-            addFromHeadOrTail(value, index);
+            addToTheMiddle(value, index);
         }
     }
 
@@ -55,21 +55,10 @@ public class LinkedList<E> extends AbstractList<E> {
         size++;
     }
 
-    private void addFromHeadOrTail(E value, int index) {
+    private void addToTheMiddle(E value, int index) {
         Node targetNode = new Node(value);
-        Node nodePrev = tail;
-        Node nodeNext = head;
-        if (index <= size / 2) {
-            for (int i = 0; i < index; i++) {
-                nodeNext = nodeNext.next;
-            }
-            nodePrev = nodeNext.prev;
-        } else {
-            for (int i = size; i > index; i--) {
-                nodePrev = nodePrev.prev;
-            }
-            nodeNext = nodePrev.next;
-        }
+        Node nodeNext = findNode(index);
+        Node nodePrev = nodeNext.prev;
         nodePrev.next = targetNode;
         targetNode.prev = nodePrev;
         nodeNext.prev = targetNode;
