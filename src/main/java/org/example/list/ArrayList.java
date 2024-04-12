@@ -1,7 +1,5 @@
 package org.example.list;
 
-import org.example.list.iterators.ArrayListIterator;
-
 import java.util.Iterator;
 import java.util.StringJoiner;
 
@@ -92,14 +90,6 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
         }
     }
 
-
-    @SuppressWarnings("unchecked")
-    public void trimToSize() {
-        E[] targetArray = (E[]) new Object[size];
-        System.arraycopy(array, 0, targetArray, 0, size);
-        array = targetArray;
-    }
-
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ", "[", "]");
@@ -109,8 +99,10 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
         return joiner.toString();
     }
 
-    @Override
-    public Iterator<E> iterator() {
-        return new ArrayListIterator<>(this);
+    @SuppressWarnings("unchecked")
+    public void trimToSize() {
+        E[] targetArray = (E[]) new Object[size];
+        System.arraycopy(array, 0, targetArray, 0, size);
+        array = targetArray;
     }
 }

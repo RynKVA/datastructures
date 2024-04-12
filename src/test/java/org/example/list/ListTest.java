@@ -1,10 +1,11 @@
 package org.example.list;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -194,39 +195,140 @@ abstract class ListTest {
     }
 
     @Test
-    void testLastIndexOfReturnElement(){
+    void testLastIndexOfReturnElement() {
         assertEquals(2, listWithSomeElements.lastIndexOf(4));
     }
 
     @Test
-    void testLastIndexOfWhenElementIsNotContained(){
+    void testLastIndexOfWhenElementIsNotContained() {
         assertEquals(-1, listWithSomeElements.indexOf(7));
     }
 
     @Test
-    void testSetMethodOnEmptyListExpectIndexOutOfBoundsException(){
+    void testSetMethodOnEmptyListExpectIndexOutOfBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.set(6, 0));
         assertEquals(exception.getMessage(), "Index out of List.");
     }
 
     @Test
-    void testSetMethodReturnSwapElement(){
+    void testSetMethodReturnSwapElement() {
         int[] array = {6, 5, 10, 3, 2};
 
         assertEquals(4, listWithSomeElements.set(10, 2));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
     }
+
     @Test
-    void testSetMethodWithIndexOutOfBoundsExpectIndexOutOfBoundsException(){
+    void testSetMethodWithIndexOutOfBoundsExpectIndexOutOfBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> listWithSomeElements.set(6, 10));
         assertEquals(exception.getMessage(), "Index out of List.");
     }
 
     @Test
-    void whenUseCLearMethodThanSizeStandZero(){
+    void whenUseCLearMethodThanSizeStandZero() {
         listWithSomeElements.clear();
         assertEquals(0, listWithSomeElements.size());
+    }
+
+    @Test
+    void testIteratorMethodNextOnListWithSomeElements() {
+        Iterator<Integer> iterator = listWithSomeElements.iterator();
+
+        assertEquals(6, iterator.next());
+        assertEquals(5, iterator.next());
+        assertEquals(4, iterator.next());
+        assertEquals(3, iterator.next());
+        assertEquals(2, iterator.next());
+    }
+
+    @Test
+    void testIteratorMethodNextWhenNoNextElementExpectNoSuchElementException() {
+        Iterator<Integer> iterator = listWithSomeElements.iterator();
+
+        for (int i = 0; i < 5; i++) {
+            iterator.next();
+        }
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                iterator::next);
+        assertEquals("No next element.", exception.getMessage());
+
+    }
+
+    @Test
+    void testIteratorMethodNextOnEmptyListExpectNoSuchElementException() {
+        Iterator<Integer> iterator = emptyList.iterator();
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                iterator::next);
+        assertEquals("No next element.", exception.getMessage());
+    }
+
+    @Test
+    void testIteratorMethodHasNextOnListWithSomeElementsReturnTrue() {
+        Iterator<Integer> iterator = listWithSomeElements.iterator();
+
+        assertTrue(iterator.hasNext());
+        iterator.next();
+        assertTrue(iterator.hasNext());
+        iterator.next();
+        assertTrue(iterator.hasNext());
+        iterator.next();
+        assertTrue(iterator.hasNext());
+        iterator.next();
+        assertTrue(iterator.hasNext());
+    }
+
+    @Test
+    void testIteratorMethodHasNextWhenNoNextElementReturnFalse() {
+        Iterator<Integer> iterator = listWithSomeElements.iterator();
+
+        for (int i = 0; i < 5; i++) {
+            iterator.next();
+        }
+
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void testIteratorMethodHasNextOnEmptyListReturnFalse() {
+        Iterator<Integer> iterator = emptyList.iterator();
+
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void removeDeleteElementWitchCalledInIteratorMethodNext() {
+        Iterator<Integer> iterator = listWithSomeElements.iterator();
+
+        int[] array = new int[]{5, 4, 3, 2};
+
+        assertEquals(6, iterator.next());
+        iterator.remove();
+        assertEquals(Arrays.toString(array), listWithSomeElements.toString());
+    }
+
+    @Test
+    void whenIteratorMethodRemoveWithNoteUsedMethodNextExpectIllegalStateException() {
+        Iterator<Integer> iterator = emptyList.iterator();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                iterator::remove);
+        assertEquals(exception.getMessage(), "Method next() not used.");
+
+    }
+
+    @Test
+    void whenUseIteratorMethodRemoveAfterAlreadyUsedItsExpectIllegalStateException() {
+        Iterator<Integer> iterator = listWithSomeElements.iterator();
+
+        iterator.next();
+        iterator.remove();
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                iterator::remove);
+        assertEquals(exception.getMessage(), "Method next() not used.");
+
     }
 }

@@ -1,28 +1,33 @@
 package org.example.list;
-public interface List <T> {
 
-    T get(int index);
-    T set(T value, int index);
+import java.util.Iterator;
 
-    int indexOf(T value);
-    int lastIndexOf(T value);
+public interface List <E> {
+
+    E get(int index);
+    E set(E value, int index);
+
+    int indexOf(E value);
+    int lastIndexOf(E value);
     void clear ();
 
-    void add(T value);
+    void add(E value);
 
-    void add(T value, int index);
+    void add(E value, int index);
 
-    boolean contains(T value);
+    boolean contains(E value);
 
-    boolean remove(T value);
+    boolean remove(E value);
 
-    T remove(int index);
+    E remove(int index);
 
     int size();
 
     boolean isEmpty();
 
     String toString();
+
+    Iterator<E> iterator();
 
 
 }

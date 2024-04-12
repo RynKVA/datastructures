@@ -4,17 +4,6 @@ import java.util.StringJoiner;
 
 public class LinkedList<E> extends AbstractList<E> {
 
-    private class Node {
-        E data;
-        Node next;
-        Node prev;
-
-        public Node(E data) {
-            this.data = data;
-        }
-
-    }
-
     private Node head;
     private Node tail;
 
@@ -33,12 +22,6 @@ public class LinkedList<E> extends AbstractList<E> {
         }
     }
 
-    private void addInEmptyList(E value) {
-        Node targetNode = new Node(value);
-        head = tail = targetNode;
-        size++;
-    }
-
     public void addFirst(E value) {
         Node firstNode = new Node(value);
         head.prev = firstNode;
@@ -55,16 +38,7 @@ public class LinkedList<E> extends AbstractList<E> {
         size++;
     }
 
-    private void addToTheMiddle(E value, int index) {
-        Node targetNode = new Node(value);
-        Node nodeNext = findNode(index);
-        Node nodePrev = nodeNext.prev;
-        nodePrev.next = targetNode;
-        targetNode.prev = nodePrev;
-        nodeNext.prev = targetNode;
-        targetNode.next = nodeNext;
-        size++;
-    }
+
 
     @Override
     public boolean remove(E value) {
@@ -110,37 +84,6 @@ public class LinkedList<E> extends AbstractList<E> {
         }
     }
 
-    private Node findNode(int index) {
-        validateIndex(index);
-        Node nodeFromTail = tail;
-        Node nodeFromHead = head;
-        if (index <= size / 2) {
-            for (int i = 0; i < index; i++) {
-                nodeFromHead = nodeFromHead.next;
-            }
-            return nodeFromHead;
-        } else {
-            for (int i = size - 1; i > index; i--) {
-                nodeFromTail = nodeFromTail.prev;
-            }
-            return nodeFromTail;
-
-        }
-    }
-
-    private void removeFirst() {
-        head = head.next;
-        head.prev.data = null;
-        head.prev = null;
-        size--;
-    }
-
-    private void removeLast() {
-        tail = tail.prev;
-        tail.next.data = null;
-        tail.next = null;
-        size--;
-    }
 
     @Override
     public void clear() {
@@ -177,6 +120,7 @@ public class LinkedList<E> extends AbstractList<E> {
         return previousValue;
     }
 
+
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ", "[", "]");
@@ -187,4 +131,66 @@ public class LinkedList<E> extends AbstractList<E> {
         }
         return joiner.toString();
     }
+
+    private class Node {
+        E data;
+        Node next;
+        Node prev;
+
+        public Node(E data) {
+            this.data = data;
+        }
+
+    }
+
+    private void addInEmptyList(E value) {
+        Node targetNode = new Node(value);
+        head = tail = targetNode;
+        size++;
+    }
+
+    private void addToTheMiddle(E value, int index) {
+        Node targetNode = new Node(value);
+        Node nodeNext = findNode(index);
+        Node nodePrev = nodeNext.prev;
+        nodePrev.next = targetNode;
+        targetNode.prev = nodePrev;
+        nodeNext.prev = targetNode;
+        targetNode.next = nodeNext;
+        size++;
+    }
+
+    private Node findNode(int index) {
+        validateIndex(index);
+        Node nodeFromTail = tail;
+        Node nodeFromHead = head;
+        if (index <= size / 2) {
+            for (int i = 0; i < index; i++) {
+                nodeFromHead = nodeFromHead.next;
+            }
+            return nodeFromHead;
+        } else {
+            for (int i = size - 1; i > index; i--) {
+                nodeFromTail = nodeFromTail.prev;
+            }
+            return nodeFromTail;
+
+        }
+    }
+
+    private void removeFirst() {
+        head = head.next;
+        head.prev.data = null;
+        head.prev = null;
+        size--;
+    }
+
+    private void removeLast() {
+        tail = tail.prev;
+        tail.next.data = null;
+        tail.next = null;
+        size--;
+    }
+
+
 }
