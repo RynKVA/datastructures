@@ -1,6 +1,7 @@
 package org.example.list;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.StringJoiner;
 
 // Generics +
@@ -91,6 +92,11 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
     }
 
     @Override
+    public Iterator<E> iterator() {
+        return new ArraylistIterator<>();
+    }
+
+    @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ", "[", "]");
         for (int i = 0; i < size; i++) {
@@ -104,5 +110,45 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
         E[] targetArray = (E[]) new Object[size];
         System.arraycopy(array, 0, targetArray, 0, size);
         array = targetArray;
+    }
+
+    private class ArraylistIterator <E> implements Iterator<E> {
+        private int position;
+        private int useFlag;
+        private int removeUsed = 0;
+
+
+        @Override
+        public boolean hasNext() {
+            return position != size();
+        }
+
+        @Override
+        public E next() {
+            if (position == size()) {
+                throw new NoSuchElementException("No next element.");
+            }
+            E element = (E) get(position);
+            position++;
+            useFlag = 1;
+            return element;
+        }
+
+        @Override
+        public void remove() {
+            if (useNext() && removeUsed == 0) {
+                ArrayList.this.remove(position - 1);
+                removeUsed++;
+                position--;
+                useFlag=0;
+            } else {
+                throw new IllegalStateException("Method next() not used.");
+            }
+            removeUsed--;
+        }
+
+        private boolean useNext() {
+            return useFlag != 0;
+        }
     }
 }

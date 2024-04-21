@@ -2,7 +2,7 @@ package org.example.list;
 
 import java.util.Iterator;
 
-public interface List <E> {
+public interface List <E> extends Iterable<E> {
 
     E get(int index);
     E set(E value, int index);

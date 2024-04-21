@@ -1,5 +1,7 @@
 package org.example.list;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.StringJoiner;
 
 public class LinkedList<E> extends AbstractList<E> {
@@ -37,7 +39,6 @@ public class LinkedList<E> extends AbstractList<E> {
         tail = lastNode;
         size++;
     }
-
 
 
     @Override
@@ -101,11 +102,8 @@ public class LinkedList<E> extends AbstractList<E> {
     @Override
     public E get(int index) {
         validateIndex(index);
-        Node node = head;
-        for (int i = 0; i < index; i++) {
-            node = node.next;
-        }
-        return node.data;
+        Node targetNode = findNode(index);
+        return (E) targetNode.data;
     }
 
     @Override
@@ -115,24 +113,28 @@ public class LinkedList<E> extends AbstractList<E> {
         for (int i = 0; i < index; i++) {
             node = node.next;
         }
-        E previousValue = node.data;
+        E previousValue = (E) node.data;
         node.data = value;
         return previousValue;
     }
 
+    @Override
+    public Iterator<E> iterator() {
+        return new LinkedListIterator<>();
+    }
 
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ", "[", "]");
         Node node = head;
-        for (int i = 0; i < size; i++) {
-            joiner.add(String.valueOf(node.data));
+        for (E value : this) {
+            joiner.add(value.toString());
             node = node.next;
         }
         return joiner.toString();
     }
 
-    private class Node {
+    private static class Node<E> {
         E data;
         Node next;
         Node prev;
@@ -190,6 +192,47 @@ public class LinkedList<E> extends AbstractList<E> {
         tail.next.data = null;
         tail.next = null;
         size--;
+    }
+
+    private class LinkedListIterator<E> implements Iterator<E> {
+        private Node current = head;
+        private int position;
+        private int useFlag;
+        private int removeUsed = 0;
+
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public E next() {
+            if (current == null) {
+                throw new NoSuchElementException("No next element.");
+            }
+            E value = (E) current.data;
+            current = current.next;
+            useFlag = 1;
+            position++;
+            return value;
+        }
+
+        @Override
+        public void remove() {
+            if (useNext() && removeUsed == 0) {
+                LinkedList.this.remove(position - 1);
+                removeUsed++;
+                position--;
+                useFlag = 0;
+            } else {
+                throw new IllegalStateException("Method next() not used.");
+            }
+            removeUsed--;
+        }
+
+        private boolean useNext() {
+            return useFlag != 0;
+        }
     }
 
 
