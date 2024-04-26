@@ -61,7 +61,7 @@ abstract class ListTest {
     }
 
     @Test
-    void elementIsAddedAtIndexMoreThanSizeExpectIndexOutOFBoundsException() {
+    void elementIsAddedAtIndexMoreThenSizeExpectIndexOutOFBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> listWithSomeElements.add(0, 7));
         assertEquals(exception.getMessage(), "Index out of List.");
@@ -150,6 +150,17 @@ abstract class ListTest {
     }
 
     @Test
+    void whenRemoveByValueInListWithOneElementThenDeleteElementAndReturnRemovedElementValue() {
+        emptyList.add(3);
+
+        assertEquals(1, emptyList.size());
+
+        emptyList.remove((Integer) 3);
+
+        assertEquals(0, emptyList.size());
+    }
+
+    @Test
     void checkTrueToSize() {
         assertEquals(5, listWithSomeElements.size());
     }
@@ -227,7 +238,7 @@ abstract class ListTest {
     }
 
     @Test
-    void whenUseCLearMethodThanSizeStandZero() {
+    void whenUseCLearMethodThenSizeStandZero() {
         listWithSomeElements.clear();
         assertEquals(0, listWithSomeElements.size());
     }

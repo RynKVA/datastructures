@@ -6,8 +6,8 @@ import java.util.StringJoiner;
 
 public class LinkedList<E> extends AbstractList<E> {
 
-    private Node head;
-    private Node tail;
+    private Node<E> head;
+    private Node<E> tail;
 
 
     @Override
@@ -25,7 +25,7 @@ public class LinkedList<E> extends AbstractList<E> {
     }
 
     public void addFirst(E value) {
-        Node firstNode = new Node(value);
+        Node<E> firstNode = new Node<>(value);
         head.prev = firstNode;
         firstNode.next = head;
         head = firstNode;
@@ -33,7 +33,7 @@ public class LinkedList<E> extends AbstractList<E> {
     }
 
     public void addLast(E value) {
-        Node lastNode = new Node(value);
+        Node<E> lastNode = new Node<>(value);
         tail.next = lastNode;
         lastNode.prev = tail;
         tail = lastNode;
@@ -50,7 +50,7 @@ public class LinkedList<E> extends AbstractList<E> {
             removeLast();
             return true;
         }
-        Node node = head;
+        Node<E> node = head;
         for (int i = 0; i < size - 1; i++) {
             node = node.next;
             if (value.equals(node.data)) {
@@ -76,7 +76,7 @@ public class LinkedList<E> extends AbstractList<E> {
             removeLast();
             return removedValue;
         } else {
-            Node targetNode = findNode(index);
+            Node<E> targetNode = findNode(index);
             targetNode.data = null;
             targetNode.prev.next = targetNode.next;
             targetNode.next.prev = targetNode.prev;
@@ -88,8 +88,8 @@ public class LinkedList<E> extends AbstractList<E> {
 
     @Override
     public void clear() {
-        for (Node node = head; node != null; ) {
-            Node next = node.next;
+        for (Node<E> node = head; node != null; ) {
+            Node<E> next = node.next;
             node.data = null;
             node.prev = null;
             node.next = null;
@@ -102,14 +102,14 @@ public class LinkedList<E> extends AbstractList<E> {
     @Override
     public E get(int index) {
         validateIndex(index);
-        Node targetNode = findNode(index);
+        Node<E> targetNode = findNode(index);
         return (E) targetNode.data;
     }
 
     @Override
     public E set(E value, int index) {
         validateIndex(index);
-        Node node = head;
+        Node<E> node = head;
         for (int i = 0; i < index; i++) {
             node = node.next;
         }
@@ -120,13 +120,13 @@ public class LinkedList<E> extends AbstractList<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new LinkedListIterator<>();
+        return new LinkedListIterator();
     }
 
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ", "[", "]");
-        Node node = head;
+        Node<E> node = head;
         for (E value : this) {
             joiner.add(value.toString());
             node = node.next;
@@ -136,25 +136,25 @@ public class LinkedList<E> extends AbstractList<E> {
 
     private static class Node<E> {
         E data;
-        Node next;
-        Node prev;
+        Node<E> next;
+        Node<E> prev;
 
-        public Node(E data) {
+        private Node(E data) {
             this.data = data;
         }
 
     }
 
     private void addInEmptyList(E value) {
-        Node targetNode = new Node(value);
+        Node<E> targetNode = new Node<>(value);
         head = tail = targetNode;
         size++;
     }
 
     private void addToTheMiddle(E value, int index) {
-        Node targetNode = new Node(value);
-        Node nodeNext = findNode(index);
-        Node nodePrev = nodeNext.prev;
+        Node<E> targetNode = new Node<>(value);
+        Node<E> nodeNext = findNode(index);
+        Node<E> nodePrev = nodeNext.prev;
         nodePrev.next = targetNode;
         targetNode.prev = nodePrev;
         nodeNext.prev = targetNode;
@@ -162,10 +162,10 @@ public class LinkedList<E> extends AbstractList<E> {
         size++;
     }
 
-    private Node findNode(int index) {
+    private Node<E> findNode(int index) {
         validateIndex(index);
-        Node nodeFromTail = tail;
-        Node nodeFromHead = head;
+        Node<E> nodeFromTail = tail;
+        Node<E> nodeFromHead = head;
         if (index <= size / 2) {
             for (int i = 0; i < index; i++) {
                 nodeFromHead = nodeFromHead.next;
@@ -181,10 +181,15 @@ public class LinkedList<E> extends AbstractList<E> {
     }
 
     private void removeFirst() {
-        head = head.next;
-        head.prev.data = null;
-        head.prev = null;
-        size--;
+        if (size > 1) {
+            head = head.next;
+            head.prev.data = null;
+            head.prev = null;
+            size--;
+        }else {
+            head = tail = null;
+            size--;
+        }
     }
 
     private void removeLast() {
@@ -194,8 +199,8 @@ public class LinkedList<E> extends AbstractList<E> {
         size--;
     }
 
-    private class LinkedListIterator<E> implements Iterator<E> {
-        private Node current = head;
+    private class LinkedListIterator implements Iterator<E> {
+        private Node<?> current = head;
         private int position;
         private int useFlag;
         private int removeUsed = 0;
@@ -206,8 +211,9 @@ public class LinkedList<E> extends AbstractList<E> {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public E next() {
-            if (current == null) {
+            if (!hasNext()) {
                 throw new NoSuchElementException("No next element.");
             }
             E value = (E) current.data;

@@ -1,5 +1,6 @@
 package org.example.list;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.StringJoiner;
@@ -82,15 +83,6 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
     }
 
 
-    @SuppressWarnings("unchecked")
-    private void expandingCapacity() {
-        if (size == array.length) {
-            E[] targetArray = (E[]) new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
-            System.arraycopy(array, 0, targetArray, 0, array.length);
-            array = targetArray;
-        }
-    }
-
     @Override
     public Iterator<E> iterator() {
         return new ArraylistIterator<>();
@@ -106,10 +98,21 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
     }
 
     @SuppressWarnings("unchecked")
+    private void expandingCapacity() {
+        if (size == array.length) {
+            E[] targetArray = (E[]) new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
+            System.arraycopy(array, 0, targetArray, 0, array.length);
+            array = targetArray;
+        }
+    }
+
+    int capacityArrayLength(){
+        return array.length;
+    }
+
+    @SuppressWarnings("unchecked")
     public void trimToSize() {
-        E[] targetArray = (E[]) new Object[size];
-        System.arraycopy(array, 0, targetArray, 0, size);
-        array = targetArray;
+        array = Arrays.copyOf(array, size);
     }
 
     private class ArraylistIterator <E> implements Iterator<E> {
@@ -122,10 +125,11 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
         public boolean hasNext() {
             return position != size();
         }
+        String s ="implementation";
 
         @Override
         public E next() {
-            if (position == size()) {
+            if (!hasNext()) {
                 throw new NoSuchElementException("No next element.");
             }
             E element = (E) get(position);
