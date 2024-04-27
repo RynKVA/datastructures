@@ -3,17 +3,19 @@ package org.example.list.map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class HashMapTest {
     private final HashMap<Character, Integer> emptyHashMap = new HashMap<>();
-    private final HashMap<Character, Integer> hashMapWithThreeEntries = new HashMap<>();
+    private final HashMap<Character, Integer> hashMapWithTwoEntries = new HashMap<>();
     private final HashMap<String, Integer> stringKeyHashMap = new HashMap<>();
-
     @BeforeEach
     void before(){
-        hashMapWithThreeEntries.put('A', 1);
-        hashMapWithThreeEntries.put('B', 3);
+        hashMapWithTwoEntries.put('A', 1);
+        hashMapWithTwoEntries.put('B', 3);
 
     }
 
@@ -36,9 +38,9 @@ class HashMapTest {
 
     @Test
     void testPutPairSameKeyAndNewValueReplaceOldValueReturnOldValue(){
-        assertEquals(3, hashMapWithThreeEntries.put('B', 5));
+        assertEquals(3, hashMapWithTwoEntries.put('B', 5));
 
-        assertEquals(5, hashMapWithThreeEntries.get('B'));
+        assertEquals(5, hashMapWithTwoEntries.get('B'));
     }
     @Test
     void testPutIFKeyAndValueIsNullStandInBucketIndexZero() {
@@ -67,28 +69,28 @@ class HashMapTest {
 
     @Test
     void whenGetByTheKeyThenReturnValueWhichIsPairWithThisKey() {
-        assertEquals(1, hashMapWithThreeEntries.get('A'));
-        assertEquals(3, hashMapWithThreeEntries.get('B'));
+        assertEquals(1, hashMapWithTwoEntries.get('A'));
+        assertEquals(3, hashMapWithTwoEntries.get('B'));
     }
 
     @Test
     void whenGetByNotUsedKeyThenReturnNull() {
-        assertNull(hashMapWithThreeEntries.get('H'));
+        assertNull(hashMapWithTwoEntries.get('H'));
     }
 
     @Test
     void whenRemoveByTheExistKeyThenDeletePairThisKeyAndValueAndReturnDeletedValue() {
-        assertEquals(2, hashMapWithThreeEntries.size());
+        assertEquals(2, hashMapWithTwoEntries.size());
 
-        assertEquals(1, hashMapWithThreeEntries.remove('A'));
-        assertEquals(3, hashMapWithThreeEntries.remove('B'));
+        assertEquals(1, hashMapWithTwoEntries.remove('A'));
+        assertEquals(3, hashMapWithTwoEntries.remove('B'));
 
-        assertEquals(0, hashMapWithThreeEntries.size());
+        assertEquals(0, hashMapWithTwoEntries.size());
     }
 
     @Test
     void whenRemoveByNotExistKeyThenReturnNull() {
-        assertNull(hashMapWithThreeEntries.remove('H'));
+        assertNull(hashMapWithTwoEntries.remove('H'));
     }
 
     @Test
@@ -120,11 +122,11 @@ class HashMapTest {
 
     @Test
     void whenKeyIsContainedThenReturnTrue() {
-        assertTrue(hashMapWithThreeEntries.containsKey('A'));
+        assertTrue(hashMapWithTwoEntries.containsKey('A'));
     }
     @Test
     void whenKeyIsNotContainedThenReturnFalse() {
-        assertFalse(hashMapWithThreeEntries.containsKey('D'));
+        assertFalse(hashMapWithTwoEntries.containsKey('D'));
     }
 
     @Test
@@ -133,7 +135,113 @@ class HashMapTest {
     }
     @Test
     void testIsEmptyOnNotEmptyMapReturnFalse(){
-        assertFalse(hashMapWithThreeEntries.isEmpty());
+        assertFalse(hashMapWithTwoEntries.isEmpty());
+    }
+
+    @Test
+    void whenUsedHasNextIfNextElementExistThenReturnTrue() {
+        Iterator<Map.Entry<Character, Integer>> iterator = hashMapWithTwoEntries.iterator();
+
+        assertTrue(iterator.hasNext());
+
+        iterator.next();
+        assertTrue(iterator.hasNext());
+
+    }
+
+    @Test
+    void whenUsedHasNextIfNextElementNotExistThenReturnFalse() {
+        Iterator<Map.Entry<Character, Integer>> iterator = hashMapWithTwoEntries.iterator();
+
+        assertTrue(iterator.hasNext());
+        iterator.next();
+        assertTrue(iterator.hasNext());
+        iterator.next();
+
+        assertFalse(iterator.hasNext());
+
+    }
+
+    @Test
+    void whenUsedHasNextInEmptyHashMapThenReturnFalse() {
+        Iterator<Map.Entry<Character, Integer>> iterator = emptyHashMap.iterator();
+
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void whenUsedNextIfNextElementExistThenReturnTargetEntryWithPairKeyAndValue() {
+        Iterator<Map.Entry<Character, Integer>> iterator = hashMapWithTwoEntries.iterator();
+
+        Map.Entry<Character, Integer> firstEntry = iterator.next();
+        assertEquals('A', firstEntry.getKey());
+        assertEquals(1, firstEntry.getValue());
+
+        Map.Entry<Character, Integer> secondEntry = iterator.next();
+        assertEquals('B', secondEntry.getKey());
+        assertEquals(3, secondEntry.getValue());
+    }
+
+    @Test
+    void whenUsedNextIfNextElementNotExistThenExpectNoSuchElementException() {
+        Iterator<Map.Entry<Character, Integer>> iterator = hashMapWithTwoEntries.iterator();
+
+        iterator.next();
+        iterator.next();
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                iterator::next);
+        assertEquals("No next element.", exception.getMessage());
+    }
+
+    @Test
+    void whenUsedNextOnEmptyHashMapThenExpectNoSuchElementException() {
+        Iterator<Map.Entry<Character, Integer>> iterator = emptyHashMap.iterator();
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                iterator::next);
+        assertEquals("No next element.", exception.getMessage());
+
+    }
+
+    @Test
+    void whenUsingRemoveAfterUsedNextThenRemoveTargetEntryAndSizeDecrease() {
+        Iterator<Map.Entry<Character, Integer>> iterator = hashMapWithTwoEntries.iterator();
+
+        assertEquals(2, hashMapWithTwoEntries.size());
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(1, hashMapWithTwoEntries.size());
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(0, hashMapWithTwoEntries.size());
+
+    }
+
+    @Test
+    void whenUsingRemoveBeforeUsedNextThenExpectIllegalStateException() {
+        Iterator<Map.Entry<Character, Integer>> iterator = hashMapWithTwoEntries.iterator();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                iterator::remove);
+        assertEquals("Method next() not used.", exception.getMessage());
+    }
+
+    @Test
+    void whenUsingRemoveAfterAlreadyUsedRemoveThenExpectIllegalStateException() {
+        Iterator<Map.Entry<Character, Integer>> iterator = hashMapWithTwoEntries.iterator();
+
+        assertEquals(2, hashMapWithTwoEntries.size());
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(1, hashMapWithTwoEntries.size());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                iterator::remove);
+        assertEquals("Method next() not used.", exception.getMessage());
     }
 
     @Test
@@ -148,5 +256,4 @@ class HashMapTest {
         assertEquals(25, emptyHashMap.size());
         System.out.println(emptyHashMap);
     }
-
 }

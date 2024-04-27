@@ -11,7 +11,7 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
     private static final double DEFAULT_EXTENSION = 1.5;
     private E[] array;
 
-    @SuppressWarnings("unchecked")
+
     public ArrayList() {
         this(DEFAULT_CAPACITY);
     }
@@ -110,49 +110,41 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
         return array.length;
     }
 
-    @SuppressWarnings("unchecked")
     public void trimToSize() {
         array = Arrays.copyOf(array, size);
     }
 
     private class ArraylistIterator <E> implements Iterator<E> {
         private int position;
-        private int useFlag;
-        private int removeUsed = 0;
+        private boolean isNextUsed;
 
 
         @Override
         public boolean hasNext() {
             return position != size();
         }
-        String s ="implementation";
 
         @Override
+        @SuppressWarnings("unchecked")
         public E next() {
             if (!hasNext()) {
                 throw new NoSuchElementException("No next element.");
             }
             E element = (E) get(position);
             position++;
-            useFlag = 1;
+            isNextUsed = true;
             return element;
         }
 
         @Override
         public void remove() {
-            if (useNext() && removeUsed == 0) {
+            if (isNextUsed) {
                 ArrayList.this.remove(position - 1);
-                removeUsed++;
                 position--;
-                useFlag=0;
+                isNextUsed = false;
             } else {
                 throw new IllegalStateException("Method next() not used.");
             }
-            removeUsed--;
-        }
-
-        private boolean useNext() {
-            return useFlag != 0;
         }
     }
 }

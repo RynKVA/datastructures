@@ -202,7 +202,7 @@ public class LinkedList<E> extends AbstractList<E> {
     private class LinkedListIterator implements Iterator<E> {
         private Node<?> current = head;
         private int position;
-        private int useFlag;
+        private boolean isNextUsed;
         private int removeUsed = 0;
 
         @Override
@@ -218,26 +218,21 @@ public class LinkedList<E> extends AbstractList<E> {
             }
             E value = (E) current.data;
             current = current.next;
-            useFlag = 1;
+            isNextUsed = true;
             position++;
             return value;
         }
 
         @Override
         public void remove() {
-            if (useNext() && removeUsed == 0) {
+            if (isNextUsed) {
                 LinkedList.this.remove(position - 1);
-                removeUsed++;
                 position--;
-                useFlag = 0;
+                isNextUsed = false;
             } else {
                 throw new IllegalStateException("Method next() not used.");
             }
             removeUsed--;
-        }
-
-        private boolean useNext() {
-            return useFlag != 0;
         }
     }
 

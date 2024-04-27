@@ -83,10 +83,6 @@ public class HashMap<K, V> implements Map<K, V> {
         }
         return joiner.toString();
     }
-    @Override
-    public Iterator<Map.Entry<K, V>> iterator() {
-        return new HashMapIterator<>();
-    }
 
     private Entry<K, V> getEntry(K key) {
         for (Map.Entry<K, V> entry : this) {
@@ -118,9 +114,9 @@ public class HashMap<K, V> implements Map<K, V> {
                 newBuckets[i] = new ArrayList<>();
             }
             ArrayList<Entry<K, V>> putEntries = new ArrayList<>();
-            for(Map.Entry<K, V> entry : this){
-                    putEntries.add((Entry<K, V>) entry);
-                }
+            for (Map.Entry<K, V> entry : this) {
+                putEntries.add((Entry<K, V>) entry);
+            }
             buckets = newBuckets;
             size = 0;
             for (Entry<K, V> entry : putEntries) {
@@ -159,12 +155,19 @@ public class HashMap<K, V> implements Map<K, V> {
 
         }
     }
+    @Override
+    public Iterator<Map.Entry<K, V>> iterator() {
+        return new HashMapIterator<>();
+    }
 
     @SuppressWarnings("unchecked")
     private class HashMapIterator<Entry> implements Iterator<Entry> {
         private int countEntries;
         private int countBuckets;
+        private Map.Entry targetEntry;
         private Iterator<Entry> bucketIterator = (Iterator<Entry>) buckets[countBuckets].iterator();
+        private boolean isNextUsed;
+        private int removeUsed;
 
         @Override
         public boolean hasNext() {
@@ -179,7 +182,9 @@ public class HashMap<K, V> implements Map<K, V> {
             do {
                 if (!buckets[countBuckets].isEmpty() && bucketIterator.hasNext()) {
                     countEntries++;
-                    return bucketIterator.next();
+                    targetEntry = (Map.Entry) bucketIterator.next();
+                    isNextUsed = true;
+                    return (Entry) targetEntry;
                 }
                 countBuckets++;
                 bucketIterator = (Iterator<Entry>) buckets[countBuckets].iterator();
@@ -189,7 +194,15 @@ public class HashMap<K, V> implements Map<K, V> {
 
         @Override
         public void remove() {
-            Iterator.super.remove();
+            if (isNextUsed) {
+                HashMap.this.remove((K) targetEntry.getKey());
+                removeUsed++;
+                countEntries--;
+                isNextUsed = false;
+            } else {
+                throw new IllegalStateException("Method next() not used.");
+            }
         }
+
     }
 }
