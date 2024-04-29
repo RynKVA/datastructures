@@ -205,7 +205,7 @@ class HashMapTest {
     }
 
     @Test
-    void whenUsingRemoveAfterUsedNextThenRemoveTargetEntryAndSizeDecrease() {
+    void whenUsingRemoveAfterUsedNextThenRemoveTargetEntryAndDecreasedSize() {
         Iterator<Map.Entry<Character, Integer>> iterator = hashMapWithTwoEntries.iterator();
 
         assertEquals(2, hashMapWithTwoEntries.size());
@@ -217,7 +217,6 @@ class HashMapTest {
         iterator.next();
         iterator.remove();
         assertEquals(0, hashMapWithTwoEntries.size());
-
     }
 
     @Test
@@ -245,7 +244,28 @@ class HashMapTest {
     }
 
     @Test
+    void testRemoveOnMapWithCollisionEntry() {
+        HashMap<Integer, Integer> collisionHashMap = new HashMap<>();
+        collisionHashMap.put(1,1);
+        collisionHashMap.put(17,17);
+        assertEquals(2, collisionHashMap.size() );
+
+        Iterator<Map.Entry<Integer, Integer>> iterator = collisionHashMap.iterator();
+        iterator.next();
+        iterator.remove();
+        assertEquals( 1, collisionHashMap.size() );
+
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(0, collisionHashMap.size() );
+
+
+    }
+
+    @Test
     void test() {
+        emptyHashMap.put(null, null);
         char key = 'A';
         int value = 0;
         for (int i = 0; i < 25; i++) {
@@ -253,7 +273,7 @@ class HashMapTest {
             key++;
             value++;
         }
-        assertEquals(25, emptyHashMap.size());
+        assertEquals(26, emptyHashMap.size());
         System.out.println(emptyHashMap);
     }
 }

@@ -14,32 +14,35 @@ public class HashMap<K, V> implements Map<K, V> {
     private ArrayList<Entry<K, V>>[] buckets;
     private int size;
 
-
+@SuppressWarnings("unchecked")
     public HashMap() {
         buckets = new ArrayList[DEFAULT_CAPACITY];
-        for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new ArrayList<>();
-        }
     }
 
     @Override
     public V put(K key, V value) {
         growBuckets();
-        ArrayList<Entry<K, V>> bucket = getBucket(key);
+        int bucketIndex = getIndex(key);
+        if (buckets[bucketIndex] == null) {
+            buckets[bucketIndex] = new ArrayList<>(1);
+            buckets[bucketIndex].add(new Entry<>(key, value));
+            size++;
+            return null;
+        }
         Entry<K, V> entry = getEntry(key);
         if (entry != null) {
             V oldValue = entry.value;
             entry.value = value;
             return oldValue;
         }
-        bucket.add(new Entry<>(key, value));
+        buckets[bucketIndex].add(new Entry<>(key, value));
         size++;
         return null;
     }
 
     @Override
     public V get(K key) {
-        return getEntry(key) == null ? null : getEntry(key).value;
+        return getEntry(key) == null ? null : Objects.requireNonNull(getEntry(key)).value;
     }
 
     @Override
@@ -74,14 +77,16 @@ public class HashMap<K, V> implements Map<K, V> {
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ", "{", "}");
-        for (ArrayList<Entry<K, V>> bucket : buckets) {
-            for (Entry<K, V> entry : bucket) {
+        for (Map.Entry<K, V> entry : this){
                 StringBuilder builder = new StringBuilder();
-                builder.append(entry.key).append("=").append(entry.value);
+                builder.append(entry.getKey()).append("=").append(entry.getValue());
                 joiner.add(builder);
             }
-        }
         return joiner.toString();
+    }
+    @Override
+    public Iterator<Map.Entry<K, V>> iterator() {
+        return new HashMapIterator<>();
     }
 
     private Entry<K, V> getEntry(K key) {
@@ -96,23 +101,24 @@ public class HashMap<K, V> implements Map<K, V> {
     private int getIndex(K key) {
         if (key != null) {
             int hash = Math.abs(key.hashCode());
-            return hash % buckets.length;
+            int positiveHash = 0;
+            if (hash < 0){
+                positiveHash = (hash + 1) * -1;
+            }
+            return positiveHash % buckets.length;
         }
         return 0;
     }
 
-    private ArrayList<Entry<K, V>> getBucket(K key) {
-        int bucketIndex = getIndex(key);
-        return buckets[bucketIndex];
-    }
+//    private ArrayList<Entry<K, V>> getBucket(K key) {
+//        int bucketIndex = getIndex(key);
+//        return buckets[bucketIndex];
+//    }
 
     @SuppressWarnings("unchecked")
     private void growBuckets() {
         if (size > buckets.length * LOAD_FACTOR) {
             ArrayList<Entry<K, V>>[] newBuckets = new ArrayList[buckets.length * GROW_fACTOR];
-            for (int i = 0; i < newBuckets.length; i++) {
-                newBuckets[i] = new ArrayList<>();
-            }
             ArrayList<Entry<K, V>> putEntries = new ArrayList<>();
             for (Map.Entry<K, V> entry : this) {
                 putEntries.add((Entry<K, V>) entry);
@@ -126,20 +132,24 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     static class Entry<K, V> implements Map.Entry<K, V> {
-        K key;
-        V value;
+        private final K key;
+        private V value;
 
         private Entry(K key, V value) {
             this.key = key;
             this.value = value;
         }
-
         public K getKey() {
             return key;
         }
 
         public V getValue() {
             return value;
+        }
+
+        public void setValue(V value) {
+            this.value = value;
+
         }
 
         @Override
@@ -149,25 +159,14 @@ public class HashMap<K, V> implements Map<K, V> {
                     ", value=" + value +
                     '}';
         }
-
-        public void setValue(V value) {
-            this.value = value;
-
-        }
-    }
-    @Override
-    public Iterator<Map.Entry<K, V>> iterator() {
-        return new HashMapIterator<>();
     }
 
     @SuppressWarnings("unchecked")
-    private class HashMapIterator<Entry> implements Iterator<Entry> {
+    private class HashMapIterator<Entry> implements Iterator<Map.Entry<K, V>> {
         private int countEntries;
         private int countBuckets;
-        private Map.Entry targetEntry;
-        private Iterator<Entry> bucketIterator = (Iterator<Entry>) buckets[countBuckets].iterator();
+        private Iterator<Entry> bucketIterator;
         private boolean isNextUsed;
-        private int removeUsed;
 
         @Override
         public boolean hasNext() {
@@ -175,34 +174,40 @@ public class HashMap<K, V> implements Map<K, V> {
         }
 
         @Override
-        public Entry next() {
+        public Map.Entry<K, V> next() {
             if (!hasNext()) {
                 throw new NoSuchElementException("No next element.");
             }
-            do {
-                if (!buckets[countBuckets].isEmpty() && bucketIterator.hasNext()) {
+            while (true) {
+                if (buckets[countBuckets] == null){
+                    bucketIterator = null;
+                    countBuckets++;
+                    continue;
+                } else if (bucketIterator == null) {
+                  bucketIterator = (Iterator<Entry>) buckets[countBuckets].iterator();
+                }
+                if (bucketIterator.hasNext()) {
+                    Map.Entry<K, V> targetEntry = (Map.Entry<K, V>) bucketIterator.next();
                     countEntries++;
-                    targetEntry = (Map.Entry) bucketIterator.next();
                     isNextUsed = true;
-                    return (Entry) targetEntry;
+                    return (Map.Entry<K, V>) targetEntry;
                 }
                 countBuckets++;
                 bucketIterator = (Iterator<Entry>) buckets[countBuckets].iterator();
-            } while (true);
+            }
         }
 
 
         @Override
         public void remove() {
             if (isNextUsed) {
-                HashMap.this.remove((K) targetEntry.getKey());
-                removeUsed++;
+                bucketIterator.remove();
+                size--;
                 countEntries--;
                 isNextUsed = false;
             } else {
                 throw new IllegalStateException("Method next() not used.");
             }
         }
-
     }
 }
