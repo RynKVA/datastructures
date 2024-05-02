@@ -1,6 +1,4 @@
-package org.example.list.map;
-
-import java.util.Iterator;
+package org.example.map;
 
 public interface Map<K, V> extends Iterable<Map.Entry<K, V>> {
     V put(K key, V value);
