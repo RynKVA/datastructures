@@ -115,12 +115,11 @@ public class HashMap<K, V> implements Map<K, V> {
         if (key == null || bucketLength == 0) {
             return 0;
         }
-        int hash = key.hashCode();
-        int positiveHash = Math.abs(hash);
+        int hash = Math.abs(key.hashCode());
         if (hash == Integer.MIN_VALUE) {
-            positiveHash = Integer.MAX_VALUE;
+            hash = Integer.MAX_VALUE;
         }
-        return positiveHash % bucketLength;
+        return hash % bucketLength;
     }
 
     @SuppressWarnings("unchecked")
@@ -136,8 +135,12 @@ public class HashMap<K, V> implements Map<K, V> {
 
     private void refillBuckets(Entry<K, V> entry, List<Entry<K, V>>[] buckets) {
         int bucketIndex = getBucketIndex(entry.key, buckets.length);
-        buckets[bucketIndex] = new ArrayList<>(1);
-        buckets[bucketIndex].add(entry);
+        if (buckets[bucketIndex] == null) {
+            buckets[bucketIndex] = new ArrayList<>(1);
+            buckets[bucketIndex].add(entry);
+        } else {
+            buckets[bucketIndex].add(entry);
+        }
     }
 
 
@@ -160,14 +163,11 @@ public class HashMap<K, V> implements Map<K, V> {
 
         public void setValue(V value) {
             this.value = value;
-
         }
 
         @Override
         public String toString() {
-            StringJoiner joiner = new StringJoiner("=", "{", "}");
-            joiner.add(key.toString()).add(value.toString());
-            return joiner.toString();
+            return "{" + key + "=" + value + "}";
         }
     }
 
@@ -203,7 +203,7 @@ public class HashMap<K, V> implements Map<K, V> {
                     return targetEntry;
                 }
                 countBuckets++;
-                bucketIterator = (Iterator<Entry>) buckets[countBuckets].iterator();
+                bucketIterator = null;
             }
         }
 
