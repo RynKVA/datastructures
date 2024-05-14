@@ -25,25 +25,26 @@ public class EntryHashMap<K, V> implements Map<K, V> {
     @Override
     public V put(K key, V value) {
         growBuckets();
+        int hashCode = hash(key);
         int bucketIndex = getBucketIndex(key, buckets.length);
+        Entry<K, V> entry = buckets[bucketIndex];
         if (buckets[bucketIndex] == null) {
-            buckets[bucketIndex] = new Entry<>(key, value);
+            buckets[bucketIndex] = new Entry<>(hashCode, key, value);
             size++;
             return null;
-        } else if (Objects.equals(key, buckets[bucketIndex].key)) {
-            V oldValue = buckets[bucketIndex].value;
-            buckets[bucketIndex].value = value;
-            return oldValue;
         }
-        Entry<K, V> entry = buckets[bucketIndex];
         while (true) {
-            if (entry.next != null) {
-                entry = entry.next;
-            } else {
-                entry.next = new Entry<>(key, value);
+            if (entry.hashCode == hashCode && Objects.equals(key, entry.key)) {
+                V oldValue = entry.value;
+                entry.value = value;
+                return oldValue;
+            }
+            if (entry.next == null) {
+                entry.next = new Entry<>(hashCode, key, value);
                 size++;
                 return null;
             }
+            entry = entry.next;
         }
     }
 
@@ -58,18 +59,19 @@ public class EntryHashMap<K, V> implements Map<K, V> {
         int bucketIndex = getBucketIndex(key, buckets.length);
         Entry<K, V> entry = buckets[bucketIndex];
         Entry<K, V> entryPrev = buckets[bucketIndex];
+        int hashCode = hash(key);
         if (entry == null) {
             return null;
-        } else if (Objects.equals(key, entry.key)) {
+        } else if (hashCode == entry.hashCode && Objects.equals(key, entry.key)) {
             buckets[bucketIndex] = buckets[bucketIndex].next;
         } else {
-            while (!Objects.equals(entry.key, key)) {
+            do {
                 entryPrev = entry;
                 if (entry.next == null) {
                     return null;
                 }
                 entry = entry.next;
-            }
+            } while (hashCode != entry.hashCode || !Objects.equals(entry.key, key));
             entryPrev.next = entry.next;
         }
         size--;
@@ -108,22 +110,19 @@ public class EntryHashMap<K, V> implements Map<K, V> {
     }
 
     private Entry<K, V> getEntry(K key) {
-        int indexBuket = getBucketIndex(key, buckets.length);
-        Entry<K, V> entry = buckets[indexBuket];
+        int bucketIndex = getBucketIndex(key, buckets.length);
+        Entry<K, V> entry = buckets[bucketIndex];
         if (entry == null) {
             return null;
-        } else if (entry.next == null) {
-            return entry;
-        } else if (Objects.equals(entry.key, key)) {
-            return entry;
         } else {
             while (true) {
-                entry = entry.next;
-                if (entry == null) {
-                    return null;
-                } else if (Objects.equals(entry.key, key)) {
+                if (hash(key) == entry.hashCode && Objects.equals(key, entry.key)) {
                     return entry;
                 }
+                if (entry.next == null) {
+                    return null;
+                }
+                entry = entry.next;
             }
         }
     }
@@ -137,6 +136,10 @@ public class EntryHashMap<K, V> implements Map<K, V> {
             return hash % bucketLength;
         }
         return 0;
+    }
+
+    private int hash(K key) {
+        return key == null ? 0 : key.hashCode();
     }
 
     @SuppressWarnings("unchecked")
@@ -164,14 +167,15 @@ public class EntryHashMap<K, V> implements Map<K, V> {
     }
 
     static class Entry<K, V> implements Map.Entry<K, V> {
-        private int hashCode;
+        private final int hashCode;
         private final K key;
         private V value;
         private Entry<K, V> next;
 
-        private Entry(K key, V value) {
+        private Entry(int hashCode, K key, V value) {
             this.key = key;
             this.value = value;
+            this.hashCode = hashCode;
         }
 
         public K getKey() {
@@ -207,7 +211,7 @@ public class EntryHashMap<K, V> implements Map<K, V> {
         @Override
         public Map.Entry<K, V> next() {
             while (hasNext()) {
-                if (entry == null){
+                if (entry == null) {
                     entry = buckets[countBuckets];
                 }
                 if (buckets[countBuckets] == null) {
