@@ -58,7 +58,7 @@ public class EntryHashMap<K, V> implements Map<K, V> {
     public V remove(K key) {
         int bucketIndex = getBucketIndex(key, buckets.length);
         Entry<K, V> entry = buckets[bucketIndex];
-        Entry<K, V> entryPrev = buckets[bucketIndex];
+        Entry<K, V> entryPrev;
         int hashCode = hash(key);
         if (entry == null) {
             return null;
@@ -128,14 +128,11 @@ public class EntryHashMap<K, V> implements Map<K, V> {
     }
 
     int getBucketIndex(K key, int bucketLength) {
-        if (key != null) {
-            int hash = Math.abs(key.hashCode());
-            if (hash == Integer.MIN_VALUE) {
-                hash = Integer.MAX_VALUE;
-            }
-            return hash % bucketLength;
+        int hash = Math.abs(hash(key));
+        if (hash == Integer.MIN_VALUE) {
+            hash = Integer.MAX_VALUE;
         }
-        return 0;
+        return hash % bucketLength;
     }
 
     private int hash(K key) {
@@ -143,7 +140,7 @@ public class EntryHashMap<K, V> implements Map<K, V> {
     }
 
     @SuppressWarnings("unchecked")
-    void growBuckets() {
+    private void growBuckets() {
         if (size >= buckets.length * LOAD_FACTOR) {
             Entry<K, V>[] newBuckets = new Entry[buckets.length * GROW_fACTOR + 1];
             for (Map.Entry<K, V> entry : this) {

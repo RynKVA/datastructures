@@ -3,8 +3,6 @@ package org.example.map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Iterator;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class EntryHashMapTest extends AbstractMapTest {

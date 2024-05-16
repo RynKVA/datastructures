@@ -30,7 +30,7 @@ public abstract class AbstractMapTest {
     }
 
     @Test
-    @DisplayName("When put in empty map two pair then check get by key witch return value")
+    @DisplayName("When put in empty map two pair then check get by key which return value")
     void testPutAndGet() {
         assertNull(emptyMap.put("A", 1));
         assertNull(emptyMap.put("B", 3));
@@ -48,7 +48,7 @@ public abstract class AbstractMapTest {
     }
 
     @Test
-    @DisplayName("When put pair with already put key then replace value")
+    @DisplayName("When put pair with already exist key then replace value")
     void testPutPairBySameKeyAndNewValueReplaceOldValueReturnOldValue() {
         assertEquals(3, MapWithTwoEntries.put("B", 5));
 
@@ -67,7 +67,7 @@ public abstract class AbstractMapTest {
 
     @Test
     @DisplayName("When put pair with already exist key null in map then value replace and return old value")
-    void whenPutKeyNullInMapWitchAlreadyExistPairWithKeyNullThenReplaceOnNewValueAndReturnOldValue() {
+    void whenPutKeyNullInMapWhichAlreadyExistPairWithKeyNullThenReplaceOnNewValueAndReturnOldValue() {
         emptyMap.put(null, null);
         assertNull(emptyMap.put(null, 8));
 
@@ -77,10 +77,11 @@ public abstract class AbstractMapTest {
     }
 
     @Test
-    @DisplayName("When put by the key with negative hashCode then its work correctly")
+    @DisplayName("When put by the key with negative hashCode then it put in bucket which index is remainder of the division module of hash on buckets length")
     void whenPutByTheKeyWithNegativeHashCodeThenItsWorkCorrectly() {
         assertEquals(-515212422, "sn,fdds23842342".hashCode());
         emptyMap.put("sn,fdds23842342", 3);
+        assertEquals(3, emptyMap.get("sn,fdds23842342"));
     }
 
     @Test
@@ -106,8 +107,8 @@ public abstract class AbstractMapTest {
     }
 
     @Test
-    @DisplayName("When get by the key entries witch in same bucket then returns corresponding value")
-    void whenGetByTheKeyEntriesWitchInSameBucketThenReturnCorrespondingValue() {
+    @DisplayName("When get by the key entries which in same bucket then returns corresponding value")
+    void whenGetByTheKeyEntriesWhichInSameBucketThenReturnCorrespondingValue() {
         Map<Integer, Integer> integerMap = getIntegerMap();
         integerMap.put(1, 1);
         integerMap.put(17, 17);
@@ -154,11 +155,12 @@ public abstract class AbstractMapTest {
     }
 
     @Test
-    @DisplayName("When remove second entry in same bucket then its work correctly and size not changes")
-    void whenRemoveSecondEntryThenItsWorkCorrectlyAndSizeNotChanges() {
+    @DisplayName("When remove second entry in same bucket then second pair is removed and size decreased")
+    void whenRemoveSecondEntryThenItsWorkCorrectlyAndSizeDecreased() {
         Map<Integer, Integer> integerMap = getIntegerMap();
         integerMap.put(1, 1); //same bucket
         integerMap.put(17, 17); //same bucket
+        assertEquals(2, integerMap.size());
 
         assertEquals(17, integerMap.remove(17));
         assertEquals(1, integerMap.size());
@@ -331,7 +333,7 @@ public abstract class AbstractMapTest {
     }
 
     @Test
-    @DisplayName("When using iterator method remove on map with three entries witch in same bucket then its works correctly")
+    @DisplayName("When using iterator method remove on map with three entries which in same bucket then its remove one by one")
     void testRemoveOnMapWithThreeEntriesInSameBucket() {
         Map<Integer, Integer> integerMap = getIntegerMap();
         integerMap.put(1, 1);

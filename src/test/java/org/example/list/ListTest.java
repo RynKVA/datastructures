@@ -100,7 +100,7 @@ abstract class ListTest {
     }
 
     @Test
-    void whenRemoveElementWitchNoteContainedReturnFalse() {
+    void whenRemoveElementWhichNoteContainedReturnFalse() {
         array = new Integer[]{6, 5, 4, 3, 2};
         assertFalse(listWithSomeElements.remove((Integer) 7));
         assertEquals(Arrays.toString(array), listWithSomeElements.toString());
@@ -311,7 +311,7 @@ abstract class ListTest {
     }
 
     @Test
-    void removeDeleteElementWitchCalledInIteratorMethodNext() {
+    void removeDeleteElementWhichCalledInIteratorMethodNext() {
         Iterator<Integer> iterator = listWithSomeElements.iterator();
 
         int[] array = new int[]{5, 4, 3, 2};
