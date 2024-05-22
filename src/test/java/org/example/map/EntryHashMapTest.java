@@ -29,4 +29,16 @@ class EntryHashMapTest extends AbstractMapTest {
         assertEquals(15, map.getBucketIndex(key, 16));
     }
 
+    @Test
+    @DisplayName("When used setValue in Entry then value changes on new in this Entry")
+    void whenUsedSetValueInEntryThenChangeValueInThisEntry() {
+        EntryHashMap <Integer,Integer> mapWithTwoEntries = new EntryHashMap<>();
+        mapWithTwoEntries.put(0, 0);
+        mapWithTwoEntries.put(2, 2);
+
+        assertEquals(2, mapWithTwoEntries.get(2));
+        mapWithTwoEntries.getEntry(2).setValue(6);
+
+        assertEquals(6, mapWithTwoEntries.get(2));
+    }
 }

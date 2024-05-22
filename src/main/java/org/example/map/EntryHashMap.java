@@ -29,23 +29,21 @@ public class EntryHashMap<K, V> implements Map<K, V> {
         int bucketIndex = getBucketIndex(key, buckets.length);
         Entry<K, V> entry = buckets[bucketIndex];
         if (buckets[bucketIndex] == null) {
-            buckets[bucketIndex] = new Entry<>(hashCode, key, value);
-            size++;
-            return null;
-        }
-        while (true) {
-            if (entry.hashCode == hashCode && Objects.equals(key, entry.key)) {
-                V oldValue = entry.value;
-                entry.value = value;
-                return oldValue;
+            buckets[bucketIndex] = new Entry<>(hashCode, key, value, bucketIndex);
+        } else {
+            for (Entry<K, V> targetEntry : entry) {
+                if (targetEntry.hashCode == hashCode && Objects.equals(key, targetEntry.key)) {
+                    V oldValue = targetEntry.value;
+                    targetEntry.value = value;
+                    return oldValue;
+                }
+                if (targetEntry.next == null) {
+                    targetEntry.next = new Entry<>(hashCode, key, value, bucketIndex);
+                }
             }
-            if (entry.next == null) {
-                entry.next = new Entry<>(hashCode, key, value);
-                size++;
-                return null;
-            }
-            entry = entry.next;
         }
+        size++;
+        return null;
     }
 
     @Override
@@ -58,24 +56,19 @@ public class EntryHashMap<K, V> implements Map<K, V> {
     public V remove(K key) {
         int bucketIndex = getBucketIndex(key, buckets.length);
         Entry<K, V> entry = buckets[bucketIndex];
-        Entry<K, V> entryPrev;
         int hashCode = hash(key);
-        if (entry == null) {
-            return null;
-        } else if (hashCode == entry.hashCode && Objects.equals(key, entry.key)) {
-            buckets[bucketIndex] = buckets[bucketIndex].next;
-        } else {
-            do {
-                entryPrev = entry;
-                if (entry.next == null) {
-                    return null;
+        if (entry != null) {
+            Iterator<Entry<K, V>> iterator = entry.iterator(buckets);
+            while (iterator.hasNext()) {
+                Entry<K, V> nextEntry = iterator.next();
+                if (hashCode == nextEntry.hashCode && Objects.equals(key, nextEntry.key)) {
+                    iterator.remove();
+                    size--;
+                    return nextEntry.value;
                 }
-                entry = entry.next;
-            } while (hashCode != entry.hashCode || !Objects.equals(entry.key, key));
-            entryPrev.next = entry.next;
+            }
         }
-        size--;
-        return entry.value;
+        return null;
     }
 
     @Override
@@ -109,22 +102,17 @@ public class EntryHashMap<K, V> implements Map<K, V> {
         return new HashMapIterator();
     }
 
-    private Entry<K, V> getEntry(K key) {
+    Entry<K, V> getEntry(K key) {
         int bucketIndex = getBucketIndex(key, buckets.length);
         Entry<K, V> entry = buckets[bucketIndex];
-        if (entry == null) {
-            return null;
-        } else {
-            while (true) {
-                if (hash(key) == entry.hashCode && Objects.equals(key, entry.key)) {
-                    return entry;
+        if (entry != null) {
+            for (Entry<K, V> targetEntry : entry) {
+                if (hash(key) == targetEntry.hashCode && Objects.equals(key, targetEntry.key)) {
+                    return targetEntry;
                 }
-                if (entry.next == null) {
-                    return null;
-                }
-                entry = entry.next;
             }
         }
+        return null;
     }
 
     int getBucketIndex(K key, int bucketLength) {
@@ -161,18 +149,21 @@ public class EntryHashMap<K, V> implements Map<K, V> {
             }
             targetEntry.next = entry;
         }
+        entry.index = bucketIndex;
     }
 
-    static class Entry<K, V> implements Map.Entry<K, V> {
+    static class Entry<K, V> implements Map.Entry<K, V>, Iterable<Entry<K, V>> {
         private final int hashCode;
         private final K key;
         private V value;
         private Entry<K, V> next;
+        private int index;
 
-        private Entry(int hashCode, K key, V value) {
+        private Entry(int hashCode, K key, V value, int index) {
             this.key = key;
             this.value = value;
             this.hashCode = hashCode;
+            this.index = index;
         }
 
         public K getKey() {
@@ -191,60 +182,102 @@ public class EntryHashMap<K, V> implements Map<K, V> {
         public String toString() {
             return "{" + key + "=" + value + "}";
         }
+
+        @Override
+        public Iterator<Entry<K, V>> iterator() {
+            return new EntryIterator();
+        }
+
+        public Iterator<Entry<K, V>> iterator(Entry<K, V>[] buckets) {
+            return new EntryIterator(buckets);
+        }
+
+        class EntryIterator implements Iterator<Entry<K, V>> {
+            private Entry<K, V> currentEntry = Entry.this;
+            private boolean isNextUsed;
+            private Entry<K, V> targetEntry;
+            private Entry<K, V> targetPrev;
+            private Entry<K, V>[] buckets;
+
+            public EntryIterator() {
+            }
+
+            public EntryIterator(Entry<K, V>[] buckets) {
+                this.buckets = buckets;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return currentEntry != null;
+            }
+
+            @Override
+            public Entry<K, V> next() {
+                targetPrev = targetEntry;
+                targetEntry = currentEntry;
+                currentEntry = currentEntry.next;
+                isNextUsed = true;
+                return targetEntry;
+            }
+
+            @Override
+            public void remove() {
+                if (!isNextUsed) {
+                    throw new IllegalStateException("Method next() not used.");
+                }
+                if (targetEntry.next == null) {
+                    targetEntry = null;
+                } else if (targetPrev == null) {
+                    buckets[index] = targetEntry.next;
+                } else {
+                    targetPrev.next = targetEntry.next;
+                }
+                isNextUsed = false;
+            }
+        }
     }
 
     private class HashMapIterator implements Iterator<Map.Entry<K, V>> {
-        private int countEntries;
-        private int countBuckets;
+        private int counter;
+        private int bucketIndex;
         private boolean isNextUsed;
-        private Entry<K, V> targetEntry;
-        private Entry<K, V> entry;
+        private Iterator<Entry<K, V>> bucketIterator;
 
         @Override
         public boolean hasNext() {
-            return countEntries != size;
+            return counter != size;
         }
 
         @Override
         public Map.Entry<K, V> next() {
             while (hasNext()) {
-                if (entry == null) {
-                    entry = buckets[countBuckets];
+                if (buckets[bucketIndex] == null) {
+                    bucketIterator = null;
+                    bucketIndex++;
+                    continue;
+                } else if (bucketIterator == null) {
+                    bucketIterator = buckets[bucketIndex].iterator(buckets);
                 }
-                if (buckets[countBuckets] == null) {
-                    countBuckets++;
-                    entry = buckets[countBuckets];
-                } else {
-                    if (entry.next == null) {
-                        targetEntry = entry;
-                        countEntries++;
-                        if (countBuckets < buckets.length - 1) {
-                            countBuckets++;
-                        }
-                        isNextUsed = true;
-                        entry = buckets[countBuckets];
-                        return targetEntry;
-                    }
-                    targetEntry = entry;
-                    entry = targetEntry.next;
-                    countEntries++;
+                if (bucketIterator.hasNext()) {
+                    Entry<K, V> targetEntry = bucketIterator.next();
+                    counter++;
                     isNextUsed = true;
                     return targetEntry;
                 }
+                bucketIndex++;
+                bucketIterator = null;
             }
             throw new NoSuchElementException("No next element.");
         }
 
         @Override
         public void remove() {
-            if (isNextUsed) {
-                EntryHashMap.this.remove(targetEntry.key);
-                countEntries--;
-                isNextUsed = false;
-            } else {
+            if (!isNextUsed) {
                 throw new IllegalStateException("Method next() not used.");
             }
+            bucketIterator.remove();
+            size--;
+            counter--;
         }
     }
-
 }

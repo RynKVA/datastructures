@@ -94,7 +94,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public Iterator<Map.Entry<K, V>> iterator() {
-        return new HashMapIterator<>();
+        return new HashMapIterator();
     }
 
     private Entry<K, V> getEntry(K key) {
@@ -143,7 +143,6 @@ public class HashMap<K, V> implements Map<K, V> {
         }
     }
 
-
     static class Entry<K, V> implements Map.Entry<K, V> {
         private final K key;
         private V value;
@@ -169,13 +168,13 @@ public class HashMap<K, V> implements Map<K, V> {
         public String toString() {
             return "{" + key + "=" + value + "}";
         }
+
     }
 
-    @SuppressWarnings("unchecked")
-    private class HashMapIterator<Entry> implements Iterator<Map.Entry<K, V>> {
+    private class HashMapIterator implements Iterator<Map.Entry<K, V>> {
         private int countEntries;
         private int countBuckets;
-        private Iterator<Entry> bucketIterator;
+        private Iterator<Entry<K, V>> bucketIterator;
         private boolean isNextUsed;
 
         @Override
@@ -194,10 +193,10 @@ public class HashMap<K, V> implements Map<K, V> {
                     countBuckets++;
                     continue;
                 } else if (bucketIterator == null) {
-                    bucketIterator = (Iterator<Entry>) buckets[countBuckets].iterator();
+                    bucketIterator = buckets[countBuckets].iterator();
                 }
                 if (bucketIterator.hasNext()) {
-                    Map.Entry<K, V> targetEntry = (Map.Entry<K, V>) bucketIterator.next();
+                    Map.Entry<K, V> targetEntry = bucketIterator.next();
                     countEntries++;
                     isNextUsed = true;
                     return targetEntry;
@@ -207,17 +206,15 @@ public class HashMap<K, V> implements Map<K, V> {
             }
         }
 
-
         @Override
         public void remove() {
-            if (isNextUsed) {
-                bucketIterator.remove();
-                size--;
-                countEntries--;
-                isNextUsed = false;
-            } else {
+            if (!isNextUsed) {
                 throw new IllegalStateException("Method next() not used.");
             }
+            bucketIterator.remove();
+            size--;
+            countEntries--;
+            isNextUsed = false;
         }
     }
 }

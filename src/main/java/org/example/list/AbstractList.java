@@ -1,7 +1,7 @@
 package org.example.list;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 public abstract class AbstractList<E> implements List<E> {
     protected int size;
@@ -10,6 +10,16 @@ public abstract class AbstractList<E> implements List<E> {
     @Override
     public void add(E value) {
         add(value, size);
+    }
+
+    @Override
+    public boolean remove(E value) {
+        int index = indexOf(value);
+        if (index == -1) {
+            return false;
+        }
+        remove(index);
+        return true;
     }
 
     @Override
@@ -24,10 +34,12 @@ public abstract class AbstractList<E> implements List<E> {
 
     @Override
     public int indexOf(E value) {
-        for (int i = 0; i < size; i++) {
-            if (value.equals(get(i))) {
-                return i;
+        int index = 0;
+        for (E findValue : this) {
+            if (Objects.equals(value, findValue)) {
+                return index;
             }
+            index++;
         }
         return -1;
     }
@@ -35,7 +47,7 @@ public abstract class AbstractList<E> implements List<E> {
     @Override
     public int lastIndexOf(E value) {
         for (int i = size - 1; i >= 0; i--) {
-            if (value.equals(get(i))) {
+            if (Objects.equals(value, get(i))) {
                 return i;
             }
         }
@@ -50,13 +62,25 @@ public abstract class AbstractList<E> implements List<E> {
 
     protected void validateIndexOnAdd(int index) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Index out of List.");
+            throw new IndexOutOfBoundsException("Index: " + index + " out of bounds [0, " + size + "]");
         }
     }
 
     protected void validateIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index out of List.");
+            if (size == 0) {
+                throw new IndexOutOfBoundsException("List is empty");
+            }
+            throw new IndexOutOfBoundsException("Index: " + index + " out of bounds [0, " + size + "]");
         }
+    }
+
+    @Override
+    public String toString() {
+        StringJoiner joiner = new StringJoiner(", ", "[", "]");
+        for (E value : this) {
+            joiner.add(String.valueOf(value));
+        }
+        return joiner.toString();
     }
 }

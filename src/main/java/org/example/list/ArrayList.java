@@ -3,14 +3,11 @@ package org.example.list;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.StringJoiner;
 
-// Generics +
 public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final double DEFAULT_EXTENSION = 1.5;
     private E[] array;
-
 
     public ArrayList() {
         this(DEFAULT_CAPACITY);
@@ -24,25 +21,12 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
     @Override
     public void add(E value, int index) {
         validateIndexOnAdd(index);
-        expandingCapacity();
+        growIfNeeded();
         if (size != 0) {
             System.arraycopy(array, index, array, index + 1, size - index);
         }
         array[index] = value;
         size++;
-    }
-
-    @Override
-    public boolean remove(E value) {
-        for (int i = 0; i < size; i++) {
-            if (array[i].equals(value)) {
-                System.arraycopy(array, indexOf(value) + 1, array, indexOf(value), size - (indexOf(value) + 1));
-                array[size - 1] = null;
-                size--;
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -55,14 +39,10 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
 
     @Override
     public E remove(int index) {
-        validateIndex(index);
         E removedElement = get(index);
-        if (index == size - 1) {
-            array[size - 1] = null;
-            size--;
-            return removedElement;
+        if (index != size - 1) {
+            System.arraycopy(array, index + 1, array, index, size - (index + 1));
         }
-        System.arraycopy(array, index + 1, array, index, size - (index + 1));
         array[size - 1] = null;
         size--;
         return removedElement;
@@ -76,29 +56,18 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
 
     @Override
     public E set(E value, int index) {
-        validateIndex(index);
-        E previousValue = array[index];
+        E previousValue = get(index);
         array[index] = value;
         return previousValue;
     }
 
-
     @Override
     public Iterator<E> iterator() {
-        return new ArraylistIterator<>();
-    }
-
-    @Override
-    public String toString() {
-        StringJoiner joiner = new StringJoiner(", ", "[", "]");
-        for (int i = 0; i < size; i++) {
-            joiner.add(String.valueOf(array[i]));
-        }
-        return joiner.toString();
+        return new ArraylistIterator();
     }
 
     @SuppressWarnings("unchecked")
-    private void expandingCapacity() {
+    private void growIfNeeded() {
         if (size == array.length) {
             E[] targetArray = (E[]) new Object[(int) (array.length * DEFAULT_EXTENSION + 1)];
             System.arraycopy(array, 0, targetArray, 0, array.length);
@@ -106,7 +75,7 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
         }
     }
 
-    int capacityArrayLength(){
+    int capacityArrayLength() {
         return array.length;
     }
 
@@ -114,10 +83,9 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
         array = Arrays.copyOf(array, size);
     }
 
-    private class ArraylistIterator <E> implements Iterator<E> {
+    private class ArraylistIterator implements Iterator<E> {
         private int position;
         private boolean isNextUsed;
-
 
         @Override
         public boolean hasNext() {
@@ -125,7 +93,6 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public E next() {
             if (!hasNext()) {
                 throw new NoSuchElementException("No next element.");
@@ -138,13 +105,12 @@ public class ArrayList<E> extends AbstractList<E> implements Iterable<E> {
 
         @Override
         public void remove() {
-            if (isNextUsed) {
-                ArrayList.this.remove(position - 1);
-                position--;
-                isNextUsed = false;
-            } else {
+            if (!isNextUsed) {
                 throw new IllegalStateException("Method next() not used.");
             }
+            ArrayList.this.remove(position - 1);
+            position--;
+            isNextUsed = false;
         }
     }
 }

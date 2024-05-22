@@ -12,9 +12,9 @@ class ArrayListTest  extends ListTest {
     }
 
     @Test
-    @DisplayName("When default capacity (10) is full then capacity expending on default extension (1.5) + 1")
+    @DisplayName("When default capacity (10) is full then capacity grow on default extension (1.5) + 1")
     void whenDefaultCapacityIsFullThenCapacityExpendingOnDefaultExtensionPlusOne(){
-       assertEquals(10, emptyList.capacityArrayLength() );
+       assertEquals(10, emptyList.capacityArrayLength());
 
         for (int i = 0; i < 11; i++) {
             emptyList.add(i);

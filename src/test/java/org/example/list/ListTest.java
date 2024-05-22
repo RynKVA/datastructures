@@ -64,7 +64,7 @@ abstract class ListTest {
     void elementIsAddedAtIndexMoreThenSizeExpectIndexOutOFBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> listWithSomeElements.add(0, 7));
-        assertEquals(exception.getMessage(), "Index out of List.");
+        assertEquals(exception.getMessage(), "Index: 7 out of bounds [0, 5]");
     }
 
     @Test
@@ -111,7 +111,7 @@ abstract class ListTest {
     void whenElementIsRemovedFromEmptyListExpectIndexOutOFBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.remove(5));
-        assertEquals(exception.getMessage(), "Index out of List.");
+        assertEquals(exception.getMessage(), "List is empty");
     }
 
     @Test
@@ -139,14 +139,14 @@ abstract class ListTest {
     void whenRemovedByIndexInEmptyListExpectIndexOutOfBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.remove(0));
-        assertEquals(exception.getMessage(), "Index out of List.");
+        assertEquals(exception.getMessage(), "List is empty");
     }
 
     @Test
     void whenRemovedByIndexWhichOutOfListExpectIndexOutOfBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> listWithSomeElements.remove(5));
-        assertEquals(exception.getMessage(), "Index out of List.");
+        assertEquals(exception.getMessage(), "Index: 5 out of bounds [0, 5]");
     }
 
     @Test
@@ -185,14 +185,14 @@ abstract class ListTest {
     void getValueFromIndexWhenListIsEmpty() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.get(0));
-        assertEquals(exception.getMessage(), "Index out of List.");
+        assertEquals(exception.getMessage(), "List is empty");
     }
 
     @Test
     void getValueFromIndexOutOfListExpectIndexOutOfBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> listWithSomeElements.get(6));
-        assertEquals(exception.getMessage(), "Index out of List.");
+        assertEquals(exception.getMessage(), "Index: 6 out of bounds [0, 5]");
     }
 
     @Test
@@ -219,7 +219,7 @@ abstract class ListTest {
     void testSetMethodOnEmptyListExpectIndexOutOfBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> emptyList.set(6, 0));
-        assertEquals(exception.getMessage(), "Index out of List.");
+        assertEquals(exception.getMessage(), "List is empty");
     }
 
     @Test
@@ -234,7 +234,7 @@ abstract class ListTest {
     void testSetMethodWithIndexOutOfBoundsExpectIndexOutOfBoundsException() {
         IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class,
                 () -> listWithSomeElements.set(6, 10));
-        assertEquals(exception.getMessage(), "Index out of List.");
+        assertEquals(exception.getMessage(), "Index: 10 out of bounds [0, 5]");
     }
 
     @Test
@@ -341,5 +341,48 @@ abstract class ListTest {
                 iterator::remove);
         assertEquals(exception.getMessage(), "Method next() not used.");
 
+    }
+
+    @Test
+    void whenUsedIteratorMethodRemoveAfterUsingNextThenListStandEmpty() {
+        Iterator<Integer> iterator = listWithSomeElements.iterator();
+
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
+        assertEquals(0, listWithSomeElements.size());
+    }
+
+    @Test
+    void whenUsedIteratorMethodRemoveAfterUsingNextInListWithOneElementsThenListStandEmpty() {
+        emptyList.add(1);
+        Iterator<Integer> iterator = emptyList.iterator();
+
+        assertEquals(1, iterator.next());
+
+    }
+
+    @Test
+    void whenUsedIteratorMethodRemoveAfterUsingNextOnLastElementThenSizeDecreased() {
+        Iterator<Integer> iterator = listWithSomeElements.iterator();
+
+        while (iterator.hasNext()) {
+            iterator.next();
+        }
+        iterator.remove();
+        assertEquals(4, listWithSomeElements.size());
+    }
+
+    @Test
+    void whenUsedIteratorMethodRemoveOnThirdElementThenSizeDecreased() {
+        Iterator<Integer> iterator = listWithSomeElements.iterator();
+
+        iterator.next();
+        iterator.next();
+        iterator.next();
+
+        iterator.remove();
+        assertEquals(4, listWithSomeElements.size());
     }
 }

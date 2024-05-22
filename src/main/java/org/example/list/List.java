@@ -5,10 +5,13 @@ import java.util.Iterator;
 public interface List <E> extends Iterable<E> {
 
     E get(int index);
+
     E set(E value, int index);
 
     int indexOf(E value);
+
     int lastIndexOf(E value);
+
     void clear ();
 
     void add(E value);
@@ -24,10 +27,4 @@ public interface List <E> extends Iterable<E> {
     int size();
 
     boolean isEmpty();
-
-    String toString();
-
-    Iterator<E> iterator();
-
-
 }

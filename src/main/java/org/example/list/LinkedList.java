@@ -2,89 +2,68 @@ package org.example.list;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.StringJoiner;
 
 public class LinkedList<E> extends AbstractList<E> {
-
     private Node<E> head;
     private Node<E> tail;
-
 
     @Override
     public void add(E value, int index) {
         validateIndexOnAdd(index);
+        Node<E> targetNode = new Node<>(value);
         if (size == 0) {
-            addInEmptyList(value);
+            head = tail = targetNode;
         } else if (index == 0) {
-            addFirst(value);
+            head.prev = targetNode;
+            targetNode.next = head;
+            head = targetNode;
         } else if (index == size) {
-            addLast(value);
+            tail.next = targetNode;
+            targetNode.prev = tail;
+            tail = targetNode;
         } else {
-            addToTheMiddle(value, index);
+            Node<E> nodeNext = findNode(index);
+            Node<E> nodePrev = nodeNext.prev;
+            nodePrev.next = targetNode;
+            targetNode.prev = nodePrev;
+            nodeNext.prev = targetNode;
+            targetNode.next = nodeNext;
         }
+        size++;
     }
 
     public void addFirst(E value) {
-        Node<E> firstNode = new Node<>(value);
-        head.prev = firstNode;
-        firstNode.next = head;
-        head = firstNode;
-        size++;
+        add(value, 0);
     }
 
     public void addLast(E value) {
-        Node<E> lastNode = new Node<>(value);
-        tail.next = lastNode;
-        lastNode.prev = tail;
-        tail = lastNode;
-        size++;
+        add(value, size - 1);
     }
-
-
-    @Override
-    public boolean remove(E value) {
-        if (indexOf(value) == 0) {
-            removeFirst();
-            return true;
-        } else if (indexOf(value) == size - 1) {
-            removeLast();
-            return true;
-        }
-        Node<E> node = head;
-        for (int i = 0; i < size - 1; i++) {
-            node = node.next;
-            if (value.equals(node.data)) {
-                node.data = null;
-                node.prev.next = node.next;
-                node.next.prev = node.prev;
-                size--;
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     @Override
     public E remove(int index) {
-        validateIndex(index);
         E removedValue = get(index);
         if (index == 0) {
-            removeFirst();
-            return removedValue;
+            if (size == 1) {
+                head = tail = null;
+            } else {
+                head = head.next;
+                head.prev.data = null;
+                head.prev = null;
+            }
         } else if (index == size - 1) {
-            removeLast();
-            return removedValue;
+            tail = tail.prev;
+            tail.next.data = null;
+            tail.next = null;
         } else {
             Node<E> targetNode = findNode(index);
             targetNode.data = null;
             targetNode.prev.next = targetNode.next;
             targetNode.next.prev = targetNode.prev;
-            size--;
-            return removedValue;
         }
+        size--;
+        return removedValue;
     }
-
 
     @Override
     public void clear() {
@@ -103,35 +82,21 @@ public class LinkedList<E> extends AbstractList<E> {
     public E get(int index) {
         validateIndex(index);
         Node<E> targetNode = findNode(index);
-        return (E) targetNode.data;
+        return targetNode.data;
     }
 
     @Override
     public E set(E value, int index) {
         validateIndex(index);
-        Node<E> node = head;
-        for (int i = 0; i < index; i++) {
-            node = node.next;
-        }
-        E previousValue = (E) node.data;
-        node.data = value;
+        Node<E> targetNode = findNode(index);
+        E previousValue = targetNode.data;
+        targetNode.data = value;
         return previousValue;
     }
 
     @Override
     public Iterator<E> iterator() {
         return new LinkedListIterator();
-    }
-
-    @Override
-    public String toString() {
-        StringJoiner joiner = new StringJoiner(", ", "[", "]");
-        Node<E> node = head;
-        for (E value : this) {
-            joiner.add(value.toString());
-            node = node.next;
-        }
-        return joiner.toString();
     }
 
     private static class Node<E> {
@@ -142,24 +107,6 @@ public class LinkedList<E> extends AbstractList<E> {
         private Node(E data) {
             this.data = data;
         }
-
-    }
-
-    private void addInEmptyList(E value) {
-        Node<E> targetNode = new Node<>(value);
-        head = tail = targetNode;
-        size++;
-    }
-
-    private void addToTheMiddle(E value, int index) {
-        Node<E> targetNode = new Node<>(value);
-        Node<E> nodeNext = findNode(index);
-        Node<E> nodePrev = nodeNext.prev;
-        nodePrev.next = targetNode;
-        targetNode.prev = nodePrev;
-        nodeNext.prev = targetNode;
-        targetNode.next = nodeNext;
-        size++;
     }
 
     private Node<E> findNode(int index) {
@@ -176,34 +123,13 @@ public class LinkedList<E> extends AbstractList<E> {
                 nodeFromTail = nodeFromTail.prev;
             }
             return nodeFromTail;
-
         }
-    }
-
-    private void removeFirst() {
-        if (size > 1) {
-            head = head.next;
-            head.prev.data = null;
-            head.prev = null;
-            size--;
-        }else {
-            head = tail = null;
-            size--;
-        }
-    }
-
-    private void removeLast() {
-        tail = tail.prev;
-        tail.next.data = null;
-        tail.next = null;
-        size--;
     }
 
     private class LinkedListIterator implements Iterator<E> {
-        private Node<?> current = head;
-        private int position;
+        private Node<E> current = head;
+        private Node<E> targetNode;
         private boolean isNextUsed;
-        private int removeUsed = 0;
 
         @Override
         public boolean hasNext() {
@@ -211,30 +137,35 @@ public class LinkedList<E> extends AbstractList<E> {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public E next() {
             if (!hasNext()) {
                 throw new NoSuchElementException("No next element.");
             }
-            E value = (E) current.data;
+            targetNode = current;
             current = current.next;
             isNextUsed = true;
-            position++;
-            return value;
+            return targetNode.data;
         }
 
         @Override
         public void remove() {
-            if (isNextUsed) {
-                LinkedList.this.remove(position - 1);
-                position--;
-                isNextUsed = false;
-            } else {
+            if (!isNextUsed) {
                 throw new IllegalStateException("Method next() not used.");
             }
-            removeUsed--;
+            if (targetNode.prev == null && targetNode.next == null) {
+                head = tail = null;
+            } else if (targetNode.prev == null) {
+                current.prev = null;
+                head = current;
+            } else if (targetNode.next == null) {
+                tail = targetNode.prev;
+                tail.next = null;
+            } else {
+                targetNode.prev.next = current;
+                current.prev = targetNode.prev;
+            }
+            size--;
+            isNextUsed = false;
         }
     }
-
-
 }

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class AbstractMapTest {
     private Map<String, Integer> emptyMap;
-    private Map<String, Integer> MapWithTwoEntries;
+    private Map<String, Integer> mapWithTwoEntries;
 
     abstract Map<String, Integer> getMap();
 
@@ -23,10 +23,10 @@ public abstract class AbstractMapTest {
     @BeforeEach
     void before() {
         emptyMap = getMap();
-        MapWithTwoEntries = getMap();
+        mapWithTwoEntries = getMap();
 
-        MapWithTwoEntries.put("A", 1);
-        MapWithTwoEntries.put("B", 3);
+        mapWithTwoEntries.put("A", 1);
+        mapWithTwoEntries.put("B", 3);
     }
 
     @Test
@@ -50,9 +50,9 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("When put pair with already exist key then replace value")
     void testPutPairBySameKeyAndNewValueReplaceOldValueReturnOldValue() {
-        assertEquals(3, MapWithTwoEntries.put("B", 5));
+        assertEquals(3, mapWithTwoEntries.put("B", 5));
 
-        assertEquals(5, MapWithTwoEntries.get("B"));
+        assertEquals(5, mapWithTwoEntries.get("B"));
     }
 
     @Test
@@ -96,14 +96,14 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("When get by key then return value which is in pair with this key")
     void whenGetByTheKeyThenReturnValueWhichIsInPairWithThisKey() {
-        assertEquals(1, MapWithTwoEntries.get("A"));
-        assertEquals(3, MapWithTwoEntries.get("B"));
+        assertEquals(1, mapWithTwoEntries.get("A"));
+        assertEquals(3, mapWithTwoEntries.get("B"));
     }
 
     @Test
     @DisplayName("When get by not used key then return null")
     void whenGetByNotUsedKeyThenReturnNull() {
-        assertNull(MapWithTwoEntries.get("H"));
+        assertNull(mapWithTwoEntries.get("H"));
     }
 
     @Test
@@ -130,18 +130,18 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("When remove by key then delete pair (key, value) and return deleted value")
     void whenRemoveByTheExistKeyThenDeletePairThisKeyAndValueAndReturnDeletedValue() {
-        assertEquals(2, MapWithTwoEntries.size());
+        assertEquals(2, mapWithTwoEntries.size());
 
-        assertEquals(1, MapWithTwoEntries.remove("A"));
-        assertEquals(3, MapWithTwoEntries.remove("B"));
+        assertEquals(1, mapWithTwoEntries.remove("A"));
+        assertEquals(3, mapWithTwoEntries.remove("B"));
 
-        assertEquals(0, MapWithTwoEntries.size());
+        assertEquals(0, mapWithTwoEntries.size());
     }
 
     @Test
     @DisplayName("When remove by not exist key then return null")
     void whenRemoveByNotExistKeyThenReturnNull() {
-        assertNull(MapWithTwoEntries.remove("H"));
+        assertNull(mapWithTwoEntries.remove("H"));
     }
 
     @Test
@@ -200,13 +200,13 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("When key is contained in map then return true")
     void whenKeyIsContainedThenReturnTrue() {
-        assertTrue(MapWithTwoEntries.containsKey("A"));
+        assertTrue(mapWithTwoEntries.containsKey("A"));
     }
 
     @Test
     @DisplayName("When key is not contained in map then return false")
     void whenKeyIsNotContainedThenReturnFalse() {
-        assertFalse(MapWithTwoEntries.containsKey("D"));
+        assertFalse(mapWithTwoEntries.containsKey("D"));
     }
 
     @Test
@@ -218,13 +218,13 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("When method isEmpty used on not empty map then return false")
     void testIsEmptyOnNotEmptyMapReturnFalse() {
-        assertFalse(MapWithTwoEntries.isEmpty());
+        assertFalse(mapWithTwoEntries.isEmpty());
     }
 
     @Test
     @DisplayName("When used method hasNext if next element exist then return true")
     void whenUsedHasNextIfNextElementExistThenReturnTrue() {
-        Iterator<Map.Entry<String, Integer>> iterator = MapWithTwoEntries.iterator();
+        Iterator<Map.Entry<String, Integer>> iterator = mapWithTwoEntries.iterator();
 
         assertTrue(iterator.hasNext());
 
@@ -235,7 +235,7 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("When used method hasNext if next element not exist then return false")
     void whenUsedHasNextIfNextElementNotExistThenReturnFalse() {
-        Iterator<Map.Entry<String, Integer>> iterator = MapWithTwoEntries.iterator();
+        Iterator<Map.Entry<String, Integer>> iterator = mapWithTwoEntries.iterator();
 
         assertTrue(iterator.hasNext());
         iterator.next();
@@ -256,7 +256,7 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("When used method next if next entry exist then return target entry with his pair(key, value)")
     void whenUsedNextIfNextElementExistThenReturnTargetEntryWithPairKeyAndValue() {
-        Iterator<Map.Entry<String, Integer>> iterator = MapWithTwoEntries.iterator();
+        Iterator<Map.Entry<String, Integer>> iterator = mapWithTwoEntries.iterator();
 
         Map.Entry<String, Integer> firstEntry = iterator.next();
         assertEquals("A", firstEntry.getKey());
@@ -270,7 +270,7 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("When used method next if next entry not exist then expect NoSuchElementException")
     void whenUsedNextIfNextElementNotExistThenExpectNoSuchElementException() {
-        Iterator<Map.Entry<String, Integer>> iterator = MapWithTwoEntries.iterator();
+        Iterator<Map.Entry<String, Integer>> iterator = mapWithTwoEntries.iterator();
 
         iterator.next();
         iterator.next();
@@ -293,23 +293,23 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("When using iterator method remove after used method next then remove target entry and decreased size")
     void whenUsingRemoveAfterUsedNextThenRemoveTargetEntryAndDecreasedSize() {
-        Iterator<Map.Entry<String, Integer>> iterator = MapWithTwoEntries.iterator();
+        Iterator<Map.Entry<String, Integer>> iterator = mapWithTwoEntries.iterator();
 
-        assertEquals(2, MapWithTwoEntries.size());
-
-        iterator.next();
-        iterator.remove();
-        assertEquals(1, MapWithTwoEntries.size());
+        assertEquals(2, mapWithTwoEntries.size());
 
         iterator.next();
         iterator.remove();
-        assertEquals(0, MapWithTwoEntries.size());
+        assertEquals(1, mapWithTwoEntries.size());
+
+        iterator.next();
+        iterator.remove();
+        assertEquals(0, mapWithTwoEntries.size());
     }
 
     @Test
     @DisplayName("When using iterator method remove before using method next then expect IllegalStateException")
     void whenUsingRemoveBeforeUsedNextThenExpectIllegalStateException() {
-        Iterator<Map.Entry<String, Integer>> iterator = MapWithTwoEntries.iterator();
+        Iterator<Map.Entry<String, Integer>> iterator = mapWithTwoEntries.iterator();
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 iterator::remove);
@@ -319,13 +319,13 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("When using iterator method remove after already using iterator method remove then expect IllegalStateException")
     void whenUsingRemoveAfterAlreadyUsedRemoveThenExpectIllegalStateException() {
-        Iterator<Map.Entry<String, Integer>> iterator = MapWithTwoEntries.iterator();
+        Iterator<Map.Entry<String, Integer>> iterator = mapWithTwoEntries.iterator();
 
-        assertEquals(2, MapWithTwoEntries.size());
+        assertEquals(2, mapWithTwoEntries.size());
 
         iterator.next();
         iterator.remove();
-        assertEquals(1, MapWithTwoEntries.size());
+        assertEquals(1, mapWithTwoEntries.size());
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 iterator::remove);
@@ -358,7 +358,7 @@ public abstract class AbstractMapTest {
     @Test
     @DisplayName("Test on correction HashMap method toString")
     void toStringHashMap() {
-        assertEquals("{A=1, B=3}", MapWithTwoEntries.toString());
+        assertEquals("{A=1, B=3}", mapWithTwoEntries.toString());
     }
 
     @Test
