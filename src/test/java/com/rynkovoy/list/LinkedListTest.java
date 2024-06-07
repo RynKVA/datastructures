@@ -1,4 +1,4 @@
-package org.example.list;
+package com.rynkovoy.list;
 
 public class LinkedListTest extends ListTest {
 

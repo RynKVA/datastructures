@@ -1,4 +1,4 @@
-package org.example.map;
+package com.rynkovoy.map;
 
 public interface Map<K, V> extends Iterable<Map.Entry<K, V>> {
     V put(K key, V value);

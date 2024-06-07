@@ -1,4 +1,4 @@
-package org.example.map;
+package com.rynkovoy.map;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

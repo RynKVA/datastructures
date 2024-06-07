@@ -1,7 +1,7 @@
-package org.example.map;
+package com.rynkovoy.map;
 
-import org.example.list.ArrayList;
-import org.example.list.List;
+import com.rynkovoy.list.ArrayList;
+import com.rynkovoy.list.List;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

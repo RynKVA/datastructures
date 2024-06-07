@@ -1,4 +1,4 @@
-package org.example.list;
+package com.rynkovoy.list;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

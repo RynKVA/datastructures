@@ -1,4 +1,4 @@
-package org.example.list;
+package com.rynkovoy.list;
 
 import java.util.Iterator;
 

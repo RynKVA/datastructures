@@ -1,4 +1,4 @@
-package org.example.map;
+package com.rynkovoy.map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
